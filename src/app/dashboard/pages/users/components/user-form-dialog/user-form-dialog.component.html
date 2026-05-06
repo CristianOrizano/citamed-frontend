@@ -1,0 +1,89 @@
+<p-dialog [(visible)]="visible" [header]="dialogTitle" [modal]="true" [style]="{ width: 'min(600px, 95vw)' }" [draggable]="false"
+  [resizable]="false">
+
+  <div class="flex flex-col gap-5 pt-1">
+
+    <!-- Banner informativo -->
+    <div
+      class="flex items-start gap-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-xl px-4 py-3">
+      <i class="pi pi-info-circle text-blue-500 text-lg mt-0.5 flex-shrink-0"></i>
+      <p class="text-sm text-blue-700 dark:text-blue-300 m-0 leading-snug">
+        Recuerda asignar los perfiles adecuados para el plan propuesto
+        <span class="font-medium">(puede ser más de 1 perfil)</span>
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Nombre(s)</label>
+        <input pInputText [(ngModel)]="form.nombre" [disabled]="isReadonly" placeholder="Ingrese nombre"
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Apellido Paterno</label>
+        <input pInputText [(ngModel)]="form.apellidoPaterno" [disabled]="isReadonly"
+          placeholder="Ingrese apellido paterno" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Apellido Materno</label>
+        <input pInputText [(ngModel)]="form.apellidoMaterno" [disabled]="isReadonly"
+          placeholder="Ingrese apellido materno" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">DNI</label>
+        <input pInputText [(ngModel)]="form.dni" [disabled]="isReadonly" placeholder="Ingrese DNI" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Correo</label>
+        <input pInputText [(ngModel)]="form.email" [disabled]="isReadonly" placeholder="Ingrese correo"
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Perfil Asignado</label>
+        <p-select [(ngModel)]="form.perfil" [options]="perfiles" [disabled]="isReadonly" placeholder="-- Seleccione --"
+          styleClass="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Permisos</label>
+        <input pInputText [(ngModel)]="form.permisos" [disabled]="isReadonly" placeholder="Ingrese permisos"
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Área</label>
+        <input pInputText [(ngModel)]="form.area" [disabled]="isReadonly" placeholder="Ingrese área" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Territorio</label>
+        <input pInputText [(ngModel)]="form.territorio" [disabled]="isReadonly" placeholder="Ingrese territorio"
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[0.8rem] font-semibold text-(--p-text-muted-color)">Región</label>
+        <input pInputText [(ngModel)]="form.region" [disabled]="isReadonly" placeholder="Ingrese región"
+          class="w-full" />
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" icon="pi pi-times" [outlined]="true" severity="secondary" (onClick)="cancel()" />
+      @if (!isReadonly) {
+      <p-button label="Guardar" icon="pi pi-check" (onClick)="save()" />
+      }
+    </div>
+  </ng-template>
+
+</p-dialog>

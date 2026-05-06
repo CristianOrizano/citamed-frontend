@@ -1,0 +1,97 @@
+<div class="flex flex-col gap-6 w-full">
+
+  <!-- Header -->
+  <div class="flex items-start justify-between flex-wrap gap-4">
+    <div>
+      <h2 class="text-[1.75rem] font-bold text-(--p-text-color)  m-0 tracking-[-0.7px]">Dashboard</h2>
+      <p class="text-sm text-(--p-text-muted-color) mt-1 m-0">Bienvenido de nuevo — aquí tienes un resumen de la
+        plataforma
+      </p>
+    </div>
+    <div
+      class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--p-content-border-color) text-[0.8rem] text-(--p-text-muted-color) bg-white dark:bg-slate-800">
+      <i class="pi pi-calendar text-xs"></i>
+      <span>{{ today }}</span>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    @for (card of kpiCards; track card.label) {
+    <div
+      class="bg-white dark:bg-slate-800 border border-(--p-content-border-color) rounded-[14px] overflow-hidden
+                  shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(0,0,0,0.07)] transition-all duration-200">
+      <div class="h-[3px]" [style.background]="card.gradient"></div>
+      <div class="p-5 flex flex-col gap-4">
+        <div class="flex items-start justify-between">
+          <i class="text-xl" [ngClass]="[card.icon, card.iconColor]"></i>
+          <span class="text-[0.72rem] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1"
+            [ngClass]="card.badgeClass">
+            <i class="pi text-[0.6rem]" [ngClass]="card.badgeIcon"></i>
+            {{ card.badge }}
+          </span>
+        </div>
+        <div>
+          <div class="text-[2.25rem] font-extrabold text-(--p-text-color) leading-none">{{ card.value }}</div>
+          <div class="text-[0.68rem] font-semibold text-(--p-text-muted-color) mt-2 tracking-[0.07em]">{{ card.label }}
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Bottom grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+
+    <!-- Actividad Reciente -->
+    <div class="lg:col-span-2 bg-white dark:bg-slate-800 border border-(--p-content-border-color) border-l-[3px] border-l-blue-500
+                rounded-[14px] shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-(--p-content-border-color)">
+        <div>
+          <h3 class="text-[0.925rem] font-semibold text-(--p-text-color) m-0">Actividad Reciente</h3>
+          <p class="text-[0.72rem] text-(--p-text-muted-color) mt-0.5 m-0">Últimas actualizaciones de la plataforma</p>
+        </div>
+        <span
+          class="text-[0.72rem] font-semibold text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400 px-2.5 py-1 rounded-full">
+          5 eventos
+        </span>
+      </div>
+      <div class="flex flex-col">
+        @for (activity of activities; track activity.title) {
+        <div class="flex items-start gap-4 px-5 py-3.5 border-b border-(--p-content-border-color) last:border-b-0
+                      hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-100">
+          <div class="mt-[7px] w-2 h-2 rounded-full flex-shrink-0" [ngClass]="activity.dotColor"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-[0.85rem] font-semibold text-(--p-text-color)">{{ activity.title }}</div>
+            <div class="text-[0.78rem] text-(--p-text-muted-color) mt-0.5 truncate">{{ activity.subtitle }}</div>
+          </div>
+          <span class="text-[0.72rem] text-(--p-text-muted-color) shrink-0 mt-0.5">{{ activity.time }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Accesos Rápidos -->
+    <div class="bg-white dark:bg-slate-800 border border-(--p-content-border-color) rounded-[14px]
+                shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+      <div class="px-5 py-4 border-b border-(--p-content-border-color)">
+        <h3 class="text-[0.925rem] font-semibold text-(--p-text-color) m-0">Accesos Rápidos</h3>
+        <p class="text-[0.72rem] text-(--p-text-muted-color) mt-0.5 m-0">Secciones más usadas</p>
+      </div>
+      <div class="flex flex-col">
+        @for (item of quickAccess; track item.label) {
+        <a [routerLink]="item.route" class="flex items-center gap-3.5 px-5 py-3.5 border-b border-(--p-content-border-color) last:border-b-0
+                    hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-100 no-underline">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" [ngClass]="item.iconBg">
+            <i class="text-sm" [ngClass]="[item.icon, item.iconColor]"></i>
+          </div>
+          <span class="flex-1 text-[0.85rem] font-medium text-(--p-text-color)">{{ item.label }}</span>
+          <i class="pi pi-chevron-right text-[0.7rem] text-(--p-text-muted-color)"></i>
+        </a>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

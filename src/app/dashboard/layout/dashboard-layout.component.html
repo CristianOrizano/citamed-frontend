@@ -1,0 +1,28 @@
+<div class="layout-wrapper" [class.sidebar-collapsed]="sidebarCollapsed()">
+
+  <!-- Mobile overlay -->
+  @if (mobileOpen()) {
+    <div class="mobile-overlay" (click)="mobileOpen.set(false)"></div>
+  }
+
+  <!-- Sidebar -->
+  <app-sidebar
+    [collapsed]="sidebarCollapsed()"
+    [mobileOpen]="mobileOpen()"
+    (collapseToggle)="sidebarCollapsed.set(!sidebarCollapsed())"
+    (mobileClose)="mobileOpen.set(false)"
+  />
+
+  <!-- Main content -->
+  <div class="main-content">
+    <app-navbar
+      [collapsed]="sidebarCollapsed()"
+      (hamburgerClick)="mobileOpen.set(!mobileOpen())"
+      (collapseToggle)="sidebarCollapsed.set(!sidebarCollapsed())"
+    />
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </div>
+
+</div>

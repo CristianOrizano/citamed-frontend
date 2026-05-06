@@ -1,0 +1,60 @@
+<aside class="sidebar" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
+
+  <!-- Header: Logo -->
+  <div class="sidebar-header  mx-4 mt-5 px-8">
+    <div class="logo-wrapper ">
+      <img src="icons/image101.svg" alt="tutorIA" class="logo-img" />
+      <span class="logo-text " >Tutor<span class="logo-accent font-extrabold">IA</span></span>
+    </div>
+    <button class="mobile-close-btn" (click)="mobileClose.emit()">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+
+    <!-- Dashboard (standalone, sin acordeón) -->
+    <div class="nav-section">
+      @for (item of topItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="nav-item"
+          [pTooltip]="item.label"
+          tooltipPosition="right"
+          (click)="mobileOpen && mobileClose.emit()"
+        >
+          <span class="item-icon-wrap"><i [class]="item.icon"></i></span>
+          <span class="item-label">{{ item.label }}</span>
+        </a>
+      }
+    </div>
+
+    <!-- Secciones planas -->
+    @for (section of navSections; track section.title) {
+      <div class="nav-section">
+        <span class="section-label">{{ section.title }}</span>
+        @for (item of section.items; track item.route) {
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            class="nav-item"
+            [pTooltip]="item.label"
+            tooltipPosition="right"
+            (click)="mobileOpen && mobileClose.emit()"
+          >
+            <span class="item-icon-wrap"><i [class]="item.icon"></i></span>
+            <span class="item-label">{{ item.label }}</span>
+          </a>
+        }
+      </div>
+    }
+
+  </nav>
+
+
+
+</aside>

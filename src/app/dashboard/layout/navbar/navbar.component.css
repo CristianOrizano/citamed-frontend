@@ -1,0 +1,212 @@
+.navbar {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #e8edf2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ─── Left ──────────────────────────────────────────────────── */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.collapse-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: all 0.15s;
+  line-height: 1;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: all 0.15s;
+  line-height: 1;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  @media (max-width: 1023px) {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ─── Right ─────────────────────────────────────────────────── */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.30rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  color: #64748b;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  & i {
+    font-size: 1.2rem;
+    transition: transform 0.18s ease;
+  }
+
+  &:hover i {
+    transform: translateY(-1px) scale(1.15);
+  }
+}
+
+.notif-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-count {
+  position: absolute;
+  top: -6px;
+  right: -7px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.58rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 1.5px solid white;
+}
+
+.v-divider {
+  width: 1px;
+  height: 22px;
+  background: #e2e8f0;
+  margin: 0 0.375rem;
+}
+
+/* ─── User section ──────────────────────────────────────────── */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+
+  @media (max-width: 600px) {
+    gap: 0;
+  }
+}
+
+.user-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.logout-btn {
+  color: #94a3b8;
+  margin-left: 0.125rem;
+
+  &:hover {
+    background: #fef2f2;
+    color: #ef4444;
+  }
+}
+
+/* ─── PrimeNG avatar ────────────────────────────────────────── */
+::ng-deep .nav-avatar {
+  width: 33px !important;
+  height: 33px !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────────── */
+:host-context(.dark) {
+  & .navbar {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+
+  & .collapse-btn,
+  & .hamburger-btn,
+  & .icon-btn {
+    color: #94a3b8;
+
+    &:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+  }
+
+  & .logout-btn {
+    &:hover {
+      background: #450a0a;
+      color: #f87171;
+    }
+  }
+
+  & .user-name {
+    color: #e2e8f0;
+  }
+
+  & .v-divider {
+    background: #334155;
+  }
+
+  & .notif-count {
+    border-color: #1e293b;
+  }
+}
