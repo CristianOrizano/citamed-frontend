@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MeResponse } from '../../auth/interfaces/auth.interface';
 
 const TOKEN_KEY = 'auth_token';
 const EXPIRES_KEY = 'auth_expires';
-const USERNAME_KEY = 'auth_username';
+const USER_KEY = 'auth_user';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
@@ -12,22 +13,23 @@ export class TokenService {
     localStorage.setItem(EXPIRES_KEY, expiresOn);
   }
 
-  saveUsername(username: string): void {
-    localStorage.setItem(USERNAME_KEY, username);
+  saveUser(user: MeResponse): void {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   get(): string | null {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  getUsername(): string | null {
-    return localStorage.getItem(USERNAME_KEY);
+  getUser(): MeResponse | null {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
   }
 
   remove(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(EXPIRES_KEY);
-    localStorage.removeItem(USERNAME_KEY);
+    localStorage.removeItem(USER_KEY);
   }
 
   isValid(): boolean {

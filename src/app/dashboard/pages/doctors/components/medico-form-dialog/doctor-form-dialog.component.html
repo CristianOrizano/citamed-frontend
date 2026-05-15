@@ -1,0 +1,149 @@
+<p-dialog
+  [(visible)]="visible"
+  [header]="dialogTitle"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="w-full max-w-[680px]"
+  (onHide)="cancel()">
+
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-2.5">
+      <span class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/15 flex items-center justify-center flex-shrink-0">
+        <i [class]="dialogIcon + ' text-blue-600 dark:text-blue-400 text-sm'"></i>
+      </span>
+      <span class="text-[1rem] font-semibold text-(--p-text-color)">{{ dialogTitle }}</span>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="form" class="flex flex-col gap-5 pt-2">
+
+    <!-- Cuenta (solo create) -->
+    @if (isCreate) {
+      <div>
+        <p class="text-[0.72rem] font-bold tracking-widest text-(--p-text-muted-color) uppercase mb-3">Cuenta de acceso</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Correo electrónico *</label>
+            <p-iconfield>
+              <p-inputicon class="pi pi-envelope" />
+              <input pInputText formControlName="email" type="email" placeholder="correo@ejemplo.com" class="w-full"
+                [invalid]="form.get('email')!.invalid && form.get('email')!.touched" />
+            </p-iconfield>
+            @if (form.get('email')!.invalid && form.get('email')!.touched) {
+              <small class="text-red-500 text-[0.76rem]">Correo válido requerido</small>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Contraseña *</label>
+            <p-iconfield>
+              <p-inputicon class="pi pi-lock" />
+              <p-password formControlName="password" placeholder="Mínimo 6 caracteres"
+                [feedback]="false" [toggleMask]="true"
+                [invalid]="form.get('password')!.invalid && form.get('password')!.touched"
+                class="w-full" inputStyleClass="w-full pl-9" />
+            </p-iconfield>
+            @if (form.get('password')!.invalid && form.get('password')!.touched) {
+              <small class="text-red-500 text-[0.76rem]">Mínimo 6 caracteres</small>
+            }
+          </div>
+
+        </div>
+      </div>
+     
+    }
+
+    <!-- Información personal -->
+    <div>
+      <p class="text-[0.72rem] font-bold tracking-widest text-(--p-text-muted-color) uppercase mb-3">Información personal</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Nombre *</label>
+          <input pInputText formControlName="firstName" placeholder="Nombre"
+            [invalid]="form.get('firstName')!.invalid && form.get('firstName')!.touched" />
+          @if (form.get('firstName')!.invalid && form.get('firstName')!.touched) {
+            <small class="text-red-500 text-[0.76rem]">Campo requerido</small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Apellido *</label>
+          <input pInputText formControlName="lastName" placeholder="Apellido"
+            [invalid]="form.get('lastName')!.invalid && form.get('lastName')!.touched" />
+          @if (form.get('lastName')!.invalid && form.get('lastName')!.touched) {
+            <small class="text-red-500 text-[0.76rem]">Campo requerido</small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">N° Licencia (CMP) *</label>
+          <p-iconfield>
+            <p-inputicon class="pi pi-id-card" />
+            <input pInputText formControlName="licenseNumber" placeholder="CMP-00000" class="w-full"
+              [invalid]="form.get('licenseNumber')!.invalid && form.get('licenseNumber')!.touched" />
+          </p-iconfield>
+          @if (form.get('licenseNumber')!.invalid && form.get('licenseNumber')!.touched) {
+            <small class="text-red-500 text-[0.76rem]">Campo requerido</small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Teléfono</label>
+          <p-iconfield>
+            <p-inputicon class="pi pi-phone" />
+            <input pInputText formControlName="phone" placeholder="+51 999 000 000" class="w-full" />
+          </p-iconfield>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Tarifa de consulta (S/) *</label>
+          <p-inputnumber formControlName="consultationFee" placeholder="0.00"
+            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0"
+            [invalid]="form.get('consultationFee')!.invalid && form.get('consultationFee')!.touched"
+            styleClass="w-full" />
+          @if (form.get('consultationFee')!.invalid && form.get('consultationFee')!.touched) {
+            <small class="text-red-500 text-[0.76rem]">Valor requerido</small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Especialidades</label>
+          <p-multiselect
+            formControlName="specialties"
+            [options]="specialtyOptions"
+            placeholder="Selecciona especialidades"
+            display="chip"
+            styleClass="w-full" />
+        </div>
+
+      </div>
+    </div>
+
+    
+
+    <!-- Bio -->
+    <div class="flex flex-col gap-1.5">
+      <label class="text-[0.75rem] font-semibold text-(--p-text-muted-color)">Biografía / Descripción</label>
+      <textarea pTextarea formControlName="bio" rows="3"
+        placeholder="Breve descripción profesional del médico..."
+        class="w-full resize-none"></textarea>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button label="Cerrar" [outlined]="true" severity="secondary" (onClick)="cancel()" />
+      @if (!isReadonly) {
+        <p-button
+          [label]="isCreate ? 'Registrar médico' : 'Guardar cambios'"
+          [icon]="isCreate ? 'pi pi-user-plus' : 'pi pi-check'"
+          (onClick)="save()" />
+      }
+    </div>
+  </ng-template>
+
+</p-dialog>

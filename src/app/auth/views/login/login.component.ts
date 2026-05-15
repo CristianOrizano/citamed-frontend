@@ -21,7 +21,7 @@ export class LoginComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly loginForm = this.fb.group({
-    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(3)]],
   });
 
@@ -35,6 +35,7 @@ export class LoginComponent {
       return;
     }
 
+    console.log('>>>Login attempt with:');
     this.loading.set(true);
     this.errorMessage.set(null);
 
@@ -46,12 +47,10 @@ export class LoginComponent {
       )
       .subscribe({
         next: () => this.router.navigate(['/dashboard']),
-        error: (err: Error) => {
-          this.errorMessage.set(err.message ?? 'Usuario o contraseña incorrectos');
-        },
+        error: (err: Error) => this.errorMessage.set(err.message ?? 'Credenciales incorrectas'),
       });
   }
 
-  get username() { return this.loginForm.get('username')!; }
+  get email() { return this.loginForm.get('email')!; }
   get password() { return this.loginForm.get('password')!; }
 }

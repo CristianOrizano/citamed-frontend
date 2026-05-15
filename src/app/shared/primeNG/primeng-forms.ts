@@ -10,6 +10,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
@@ -29,6 +30,7 @@ export const PRIMENG_FORMS = [
   InputNumberModule,
   InputTextModule,
   KeyFilterModule,
+  MultiSelectModule,
   PasswordModule,
   SelectModule,
   TextareaModule,

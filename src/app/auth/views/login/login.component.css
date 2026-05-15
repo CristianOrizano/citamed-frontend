@@ -1,105 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+
 :host {
   display: block;
   height: 100vh;
 }
 
-/* Gradiente complejo + pseudo-elemento de grid — no hay equivalente en Tailwind */
-.login-overlay {
+.login-heading {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+}
+
+/* Foto de fondo */
+.login-grid {
+  background-image: url('/images/fondo-login.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 6px 0 32px rgba(0, 0, 0, 0.28);
+}
+
+/* Overlay diagonal — oscuro arriba-izq (texto legible), más claro abajo-der (foto visible) */
+.login-grid::before {
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    160deg,
-    rgba(8, 21, 55, 0.93) 0%,
-    rgba(12, 35, 90, 0.8) 45%,
-    rgba(15, 45, 115, 0.68) 100%
+    135deg,
+    rgba(2, 6, 23, 0.88) 0%,
+    rgba(10, 25, 85, 0.52) 100%
   );
-  z-index: 1;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.login-overlay::after {
+/* Grid pattern */
+.login-grid::after {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 65px 65px;
-}
-/* Orbe decorativo superior derecho */
-.login-brand__orb {
-  position: absolute;
-  top: -80px;
-  right: -60px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(37, 99, 235, 0.3) 0%,
-    transparent 70%
-  );
-  z-index: 2;
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
   pointer-events: none;
+  z-index: 1;
 }
 
-/* Orbe decorativo inferior izquierdo */
-.login-brand__orb-2 {
-  position: absolute;
-  bottom: -60px;
-  left: -40px;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(99, 102, 241, 0.2) 0%,
-    transparent 70%
-  );
-  z-index: 2;
-  pointer-events: none;
-}
-/* Filtros de imagen */
-.valtx-logo {
-  filter: brightness(0) invert(1);
-}
-.tutor-logo {
-  filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.4));
+/* Fondo del panel del formulario */
+.login-right {
+  background: #ffffff;
 }
 
-/* Texto con background-clip — no soportado por Tailwind */
-.app-highlight {
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.dark .login-right {
+  background: rgb(15, 23, 42);
 }
 
-/* PrimeNG internals */
+/* PrimeNG overrides — requieren ::ng-deep */
 ::ng-deep .login-btn {
   width: 100% !important;
   justify-content: center !important;
-  padding: 0.85rem 1.5rem !important;
-  border-radius: 10px !important;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-  border: none;
-  font-size: 0.875rem !important;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
+  padding: 0.88rem 1.5rem !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #005b94 0%, #0077bc 100%) !important;
+  border: none !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 0 4px 20px rgba(0, 91, 148, 0.38) !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
 }
 
-::ng-deep .login-btn:hover {
-  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
-  border-color: transparent !important;
+::ng-deep .login-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #004f80 0%, #0069a8 100%) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.45) !important;
+  box-shadow: 0 8px 28px rgba(0, 91, 148, 0.48) !important;
 }
 
 ::ng-deep .login-btn:active {
   transform: translateY(0) !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3) !important;
+  box-shadow: 0 3px 10px rgba(0, 91, 148, 0.30) !important;
 }
 
 ::ng-deep .p-inputtext {
@@ -107,8 +85,8 @@
   border-width: 1.5px !important;
   font-size: 0.875rem !important;
   box-shadow: none !important;
-  padding-top: 0.7rem !important;
-  padding-bottom: 0.7rem !important;
+  padding-top: 0.72rem !important;
+  padding-bottom: 0.72rem !important;
   transition: border-color 0.18s ease !important;
 }
 
@@ -118,28 +96,9 @@
   outline: none !important;
 }
 
-::ng-deep .p-inputtext::placeholder {
-  color: #8c9095 !important;
-  font-weight: 400 !important;
-}
-
 ::ng-deep p-password .p-inputtext {
   border-radius: 12px !important;
   font-size: 0.875rem !important;
   border-width: 1.5px !important;
   box-shadow: none !important;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease !important;
-}
-
-.login-card__title {
-  font-family: "Poppins", sans-serif;
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0;
-  line-height: 1.15;
-  white-space: nowrap;
-  letter-spacing: -0.04em;
 }

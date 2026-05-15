@@ -1,32 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PRIMENG_UI } from '../../../shared/primeNG/primeng-ui';
+import { TokenService } from '../../../core/services/token.service';
+
+export type EstadoCita = 'Confirmada' | 'Programada' | 'Completada' | 'Cancelada';
 
 interface KpiCard {
   label: string;
-  value: number | string;
-  icon: string;
-  iconColor: string;
+  value: string | number;
   badge: string;
-  badgeClass: string;
-  badgeIcon: string;
-  gradient: string;
-}
-
-interface Activity {
-  title: string;
-  subtitle: string;
-  time: string;
-  dotColor: string;
-}
-
-interface QuickAccess {
-  label: string;
+  badgeUp: boolean;
   icon: string;
-  iconColor: string;
   iconBg: string;
-  route: string;
+  iconColor: string;
+}
+
+interface CitaHoy {
+  paciente: string;
+  medico: string;
+  hora: string;
+  estado: EstadoCita;
+}
+
+interface MedicoTop {
+  initials: string;
+  nombre: string;
+  especialidad: string;
+  citas: number;
+  rating: number;
 }
 
 @Component({
@@ -36,66 +38,80 @@ interface QuickAccess {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
+  private readonly tokenService = inject(TokenService);
 
-  today = new Date().toLocaleDateString('en-US', {
+  today = new Date().toLocaleDateString('es-PE', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
+  get greeting(): string {
+    const email = this.tokenService.getUser()?.email ?? '';
+    const name = email.split('@')[0] ?? 'Admin';
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
   kpiCards: KpiCard[] = [
     {
-      label: 'PLANES DE CAPACITACIÓN',
-      value: 3,
-      icon: 'pi pi-copy',
-      iconColor: 'text-blue-500',
-      badge: 'Activos',
-      badgeClass: 'text-green-600 bg-green-50',
-      badgeIcon: 'pi-arrow-up-right',
-      gradient: 'linear-gradient(to right, #3b82f6, #a855f7)',
+      label: 'Citas hoy',
+      value: 24,
+      badge: '+12% vs ayer',
+      badgeUp: true,
+      icon: 'pi pi-calendar',
+      iconBg: 'rgba(0, 119, 188, 0.12)',
+      iconColor: '#0077bc',
     },
     {
-      label: 'CURSOS',
-      value: 17,
-      icon: 'pi pi-list',
-      iconColor: 'text-purple-500',
-      badge: 'Publicados',
-      badgeClass: 'text-blue-600 bg-blue-50',
-      badgeIcon: 'pi-arrow-up-right',
-      gradient: 'linear-gradient(to right, #a855f7, #818cf8)',
+      label: 'Médicos activos',
+      value: 8,
+      badge: '+2 este mes',
+      badgeUp: true,
+      icon: 'pi pi-user-plus',
+      iconBg: 'rgba(0, 119, 188, 0.12)',
+      iconColor: '#0077bc',
     },
     {
-      label: 'USUARIOS',
-      value: 104,
+      label: 'Pacientes registrados',
+      value: 312,
+      badge: '+18 este mes',
+      badgeUp: true,
       icon: 'pi pi-users',
-      iconColor: 'text-teal-500',
-      badge: 'Sin cambios',
-      badgeClass: 'text-slate-500 bg-slate-100',
-      badgeIcon: 'pi-minus',
-      gradient: 'linear-gradient(to right, #2dd4bf, #22d3ee)',
+      iconBg: 'rgba(249, 115, 22, 0.12)',
+      iconColor: '#f97316',
     },
     {
-      label: 'ARCHIVOS SUBIDOS',
-      value: 89,
-      icon: 'pi pi-upload',
-      iconColor: 'text-green-500',
-      badge: 'Este mes',
-      badgeClass: 'text-blue-600 bg-blue-50',
-      badgeIcon: 'pi-arrow-up-right',
-      gradient: 'linear-gradient(to right, #4ade80, #10b981)',
+      label: 'Tasa cancelación',
+      value: '6%',
+      badge: '+2% vs mes anterior',
+      badgeUp: false,
+      icon: 'pi pi-times-circle',
+      iconBg: 'rgba(239, 68, 68, 0.12)',
+      iconColor: '#ef4444',
     },
   ];
 
-  activities: Activity[] = [
-    { title: 'Nuevo Curso',                    subtitle: 'Microfinanzas 3',                                    time: '2 h atrás',   dotColor: 'bg-blue-500'   },
-    { title: 'Archivos subidos',               subtitle: '4 MP4 videos — curso de microfinanzas',              time: '5 h atrás',   dotColor: 'bg-blue-400'   },
-    { title: 'Plan de capacitación editado',   subtitle: 'Q1 2025 Capacitación Asesores Comerciales',          time: '1 día atrás', dotColor: 'bg-orange-400' },
-    { title: 'Curso editado',                  subtitle: 'Atención al cliente',                                time: '2 días atrás',dotColor: 'bg-green-500'  },
-    { title: 'Nuevo módulo agregado',          subtitle: 'Campaña AFP en plazo fijo',                          time: '3 días atrás',dotColor: 'bg-teal-400'   },
+  citasHoy: CitaHoy[] = [
+    { paciente: 'Juan Pérez',   medico: 'Dr. García',   hora: '09:00', estado: 'Confirmada' },
+    { paciente: 'María López',  medico: 'Dra. Torres',  hora: '09:30', estado: 'Programada' },
+    { paciente: 'Carlos Ruiz',  medico: 'Dr. Mendoza',  hora: '10:00', estado: 'Completada' },
+    { paciente: 'Ana Flores',   medico: 'Dr. García',   hora: '10:30', estado: 'Cancelada'  },
+    { paciente: 'Luis Vargas',  medico: 'Dra. Torres',  hora: '11:00', estado: 'Confirmada' },
   ];
 
-  quickAccess: QuickAccess[] = [
-    { label: 'Planes de Capacitación',  icon: 'pi pi-copy',    iconColor: 'text-blue-500',   iconBg: 'bg-blue-50 dark:bg-blue-950',    route: '/dashboard/planes'      },
-    { label: 'Mantenedor de Cursos',    icon: 'pi pi-list',    iconColor: 'text-purple-500', iconBg: 'bg-purple-50 dark:bg-purple-950',route: '/dashboard/cursos'      },
-    { label: 'Mantenedor de Usuarios',  icon: 'pi pi-users',   iconColor: 'text-teal-500',   iconBg: 'bg-teal-50 dark:bg-teal-950',    route: '/dashboard/usuarios'    },
-    { label: 'Parámetros',              icon: 'pi pi-cog',     iconColor: 'text-slate-500',  iconBg: 'bg-slate-100 dark:bg-slate-700', route: '/dashboard/parametros'  },
+  medicosTop: MedicoTop[] = [
+    { initials: 'CG', nombre: 'Dr. Carlos García',    especialidad: 'Cardiología',   citas: 48, rating: 4.9 },
+    { initials: 'MT', nombre: 'Dra. María Torres',    especialidad: 'Pediatría',     citas: 41, rating: 4.8 },
+    { initials: 'RM', nombre: 'Dr. Roberto Mendoza',  especialidad: 'Neurología',    citas: 37, rating: 4.7 },
+    { initials: 'LV', nombre: 'Dra. Laura Vega',      especialidad: 'Dermatología',  citas: 29, rating: 4.6 },
+    { initials: 'JP', nombre: 'Dr. Jorge Paredes',    especialidad: 'Traumatología', citas: 25, rating: 4.5 },
   ];
+
+  estadoClass(estado: EstadoCita): string {
+    const map: Record<EstadoCita, string> = {
+      Confirmada: 'estado-confirmada',
+      Programada: 'estado-programada',
+      Completada: 'estado-completada',
+      Cancelada:  'estado-cancelada',
+    };
+    return map[estado];
+  }
 }

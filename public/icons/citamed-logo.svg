@@ -1,0 +1,30 @@
+<svg width="180" height="44" viewBox="0 0 180 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      /* 1. Definimos la fuente 'Sora' usando el código Base64 */
+      @font-face {
+        font-family: 'Sora';
+        src: url(data:font/woff2;base64,AAAAA...TU_CODIGO_BASE64_GIGANTE_AQUI...) format('woff2');
+        font-weight: 700; /* Especificamos que es la variante Bold */
+        font-style: normal;
+      }
+
+      /* 2. Creamos una clase CSS que use nuestra fuente incrustada */
+      .logo-text {
+        font-family: 'Sora', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+      }
+    </style>
+  </defs>
+
+  <!-- Icon background -->
+  <rect width="44" height="44" rx="11" fill="#0C447C"/>
+  <!-- Pulse line -->
+  <polyline points="6,22 12,22 16,12 20,32 24,18 28,26 32,22 38,22" stroke="#38B6FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Dot at end -->
+  <circle cx="38" cy="22" r="2.5" fill="#38B6FF"/>
+  
+  <!-- Texto usando la clase con la fuente incrustada -->
+  <text x="54" y="29" class="logo-text" fill="#ffffff">CitaMed</text>
+</svg>

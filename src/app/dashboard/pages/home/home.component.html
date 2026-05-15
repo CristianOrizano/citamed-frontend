@@ -3,13 +3,15 @@
   <!-- Header -->
   <div class="flex items-start justify-between flex-wrap gap-4">
     <div>
-      <h2 class="text-[1.75rem] font-bold text-(--p-text-color)  m-0 tracking-[-0.7px]">Dashboard</h2>
-      <p class="text-sm text-(--p-text-muted-color) mt-1 m-0">Bienvenido de nuevo — aquí tienes un resumen de la
-        plataforma
+      <h2 class="text-[1.75rem] font-bold text-(--p-text-color) m-0 tracking-[-0.7px]">
+        Hola, {{ greeting }}
+      </h2>
+      <p class="text-sm text-(--p-text-muted-color) mt-1 m-0">
+        Aquí tienes el resumen de la clínica para hoy
       </p>
     </div>
-    <div
-      class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--p-content-border-color) text-[0.8rem] text-(--p-text-muted-color) bg-white dark:bg-slate-800">
+    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--p-content-border-color)
+                text-[0.8rem] text-(--p-text-muted-color) bg-white dark:bg-[#1c1c1c]">
       <i class="pi pi-calendar text-xs"></i>
       <span>{{ today }}</span>
     </div>
@@ -18,79 +20,104 @@
   <!-- KPI Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
     @for (card of kpiCards; track card.label) {
-    <div
-      class="bg-white dark:bg-slate-800 border border-(--p-content-border-color) rounded-[14px] overflow-hidden
-                  shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(0,0,0,0.07)] transition-all duration-200">
-      <div class="h-[3px]" [style.background]="card.gradient"></div>
-      <div class="p-5 flex flex-col gap-4">
-        <div class="flex items-start justify-between">
-          <i class="text-xl" [ngClass]="[card.icon, card.iconColor]"></i>
-          <span class="text-[0.72rem] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1"
-            [ngClass]="card.badgeClass">
-            <i class="pi text-[0.6rem]" [ngClass]="card.badgeIcon"></i>
-            {{ card.badge }}
-          </span>
-        </div>
-        <div>
-          <div class="text-[2.25rem] font-extrabold text-(--p-text-color) leading-none">{{ card.value }}</div>
-          <div class="text-[0.68rem] font-semibold text-(--p-text-muted-color) mt-2 tracking-[0.07em]">{{ card.label }}
-          </div>
+    <div class="bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color) rounded-2xl p-5
+                shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.09)] transition-shadow duration-200">
+      <div class="flex items-start justify-between mb-4">
+        <span class="text-[0.8rem] font-medium text-(--p-text-muted-color) leading-snug">{{ card.label }}</span>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+             [style.background]="card.iconBg">
+          <i class="text-[1.1rem]" [ngClass]="card.icon" [style.color]="card.iconColor"></i>
         </div>
       </div>
+      <div class="text-[2.6rem] font-extrabold text-(--p-text-color) leading-none mb-3">{{ card.value }}</div>
+      <span class="inline-flex items-center gap-1 text-[0.73rem] font-semibold px-2 py-0.5 rounded-full"
+            [ngClass]="card.badgeUp
+              ? 'text-green-600 bg-green-50 dark:bg-green-950/60 dark:text-green-400'
+              : 'text-red-500 bg-red-50 dark:bg-red-950/60 dark:text-red-400'">
+        <i class="pi pi-arrow-up-right text-[0.58rem]"></i>
+        {{ card.badge }}
+      </span>
     </div>
     }
   </div>
 
   <!-- Bottom grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
 
-    <!-- Actividad Reciente -->
-    <div class="lg:col-span-2 bg-white dark:bg-slate-800 border border-(--p-content-border-color) border-l-[3px] border-l-blue-500
-                rounded-[14px] shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+    <!-- Citas de hoy -->
+    <div class="lg:col-span-3 bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color)
+                rounded-2xl shadow-[0_1px_4px_rgba(0,0,0,0.05)] overflow-hidden">
+
       <div class="flex items-center justify-between px-5 py-4 border-b border-(--p-content-border-color)">
-        <div>
-          <h3 class="text-[0.925rem] font-semibold text-(--p-text-color) m-0">Actividad Reciente</h3>
-          <p class="text-[0.72rem] text-(--p-text-muted-color) mt-0.5 m-0">Últimas actualizaciones de la plataforma</p>
-        </div>
-        <span
-          class="text-[0.72rem] font-semibold text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400 px-2.5 py-1 rounded-full">
-          5 eventos
+        <h3 class="text-[0.95rem] font-bold text-(--p-text-color) m-0">Citas de hoy</h3>
+        <a routerLink="/dashboard/citas"
+           class="text-[0.8rem] font-medium text-[#0077bc] no-underline hover:underline flex items-center gap-1">
+          Ver todas <i class="pi pi-arrow-right text-[0.62rem]"></i>
+        </a>
+      </div>
+
+      <!-- Encabezado tabla -->
+      <div class="grid grid-cols-[1fr_1fr_72px_120px] px-5 py-2.5 border-b border-(--p-content-border-color)
+                  bg-slate-50/60 dark:bg-[#141414]">
+        <span class="text-[0.67rem] font-semibold text-(--p-text-muted-color) tracking-[0.07em]">PACIENTE</span>
+        <span class="text-[0.67rem] font-semibold text-(--p-text-muted-color) tracking-[0.07em]">MÉDICO</span>
+        <span class="text-[0.67rem] font-semibold text-(--p-text-muted-color) tracking-[0.07em]">HORA</span>
+        <span class="text-[0.67rem] font-semibold text-(--p-text-muted-color) tracking-[0.07em]">ESTADO</span>
+      </div>
+
+      <!-- Filas -->
+      @for (cita of citasHoy; track cita.paciente + cita.hora) {
+      <div class="grid grid-cols-[1fr_1fr_72px_120px] items-center px-5 py-3.5
+                  border-b border-(--p-content-border-color) last:border-b-0
+                  hover:bg-slate-50 dark:hover:bg-[#212121] transition-colors duration-100">
+        <span class="text-[0.855rem] font-semibold text-(--p-text-color)">{{ cita.paciente }}</span>
+        <span class="text-[0.855rem] text-(--p-text-muted-color)">{{ cita.medico }}</span>
+        <span class="text-[0.855rem] text-(--p-text-muted-color) font-medium">{{ cita.hora }}</span>
+        <span class="text-[0.73rem] font-semibold px-2.5 py-0.5 rounded-full w-fit"
+              [ngClass]="estadoClass(cita.estado)">
+          {{ cita.estado }}
         </span>
       </div>
-      <div class="flex flex-col">
-        @for (activity of activities; track activity.title) {
-        <div class="flex items-start gap-4 px-5 py-3.5 border-b border-(--p-content-border-color) last:border-b-0
-                      hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-100">
-          <div class="mt-[7px] w-2 h-2 rounded-full flex-shrink-0" [ngClass]="activity.dotColor"></div>
-          <div class="flex-1 min-w-0">
-            <div class="text-[0.85rem] font-semibold text-(--p-text-color)">{{ activity.title }}</div>
-            <div class="text-[0.78rem] text-(--p-text-muted-color) mt-0.5 truncate">{{ activity.subtitle }}</div>
-          </div>
-          <span class="text-[0.72rem] text-(--p-text-muted-color) shrink-0 mt-0.5">{{ activity.time }}</span>
-        </div>
-        }
-      </div>
+      }
     </div>
 
-    <!-- Accesos Rápidos -->
-    <div class="bg-white dark:bg-slate-800 border border-(--p-content-border-color) rounded-[14px]
-                shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
-      <div class="px-5 py-4 border-b border-(--p-content-border-color)">
-        <h3 class="text-[0.925rem] font-semibold text-(--p-text-color) m-0">Accesos Rápidos</h3>
-        <p class="text-[0.72rem] text-(--p-text-muted-color) mt-0.5 m-0">Secciones más usadas</p>
-      </div>
-      <div class="flex flex-col">
-        @for (item of quickAccess; track item.label) {
-        <a [routerLink]="item.route" class="flex items-center gap-3.5 px-5 py-3.5 border-b border-(--p-content-border-color) last:border-b-0
-                    hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-100 no-underline">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" [ngClass]="item.iconBg">
-            <i class="text-sm" [ngClass]="[item.icon, item.iconColor]"></i>
-          </div>
-          <span class="flex-1 text-[0.85rem] font-medium text-(--p-text-color)">{{ item.label }}</span>
-          <i class="pi pi-chevron-right text-[0.7rem] text-(--p-text-muted-color)"></i>
+    <!-- Médicos este mes -->
+    <div class="lg:col-span-2 bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color)
+                rounded-2xl shadow-[0_1px_4px_rgba(0,0,0,0.05)] overflow-hidden">
+
+      <div class="flex items-center justify-between px-5 py-4 border-b border-(--p-content-border-color)">
+        <h3 class="text-[0.95rem] font-bold text-(--p-text-color) m-0">Médicos — este mes</h3>
+        <a routerLink="/dashboard/medicos"
+           class="text-[0.8rem] font-medium text-[#0077bc] no-underline hover:underline flex items-center gap-1">
+          Ver todos <i class="pi pi-arrow-right text-[0.62rem]"></i>
         </a>
-        }
       </div>
+
+      @for (medico of medicosTop; track medico.nombre) {
+      <div class="flex items-center gap-3 px-5 py-3.5 border-b border-(--p-content-border-color) last:border-b-0
+                  hover:bg-slate-50 dark:hover:bg-[#212121] transition-colors duration-100">
+        <!-- Avatar -->
+        <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
+                    text-[0.7rem] font-bold text-white avatar-medico">
+          {{ medico.initials }}
+        </div>
+        <!-- Nombre + especialidad -->
+        <div class="flex-1 min-w-0">
+          <div class="text-[0.855rem] font-semibold text-(--p-text-color) leading-tight truncate">
+            {{ medico.nombre }}
+          </div>
+          <div class="text-[0.75rem] text-(--p-text-muted-color)">{{ medico.especialidad }}</div>
+        </div>
+        <!-- Citas + rating -->
+        <div class="text-right flex-shrink-0">
+          <div class="text-[0.82rem] font-semibold text-(--p-text-color)">{{ medico.citas }} citas</div>
+          <div class="flex items-center gap-0.5 justify-end text-amber-400">
+            <i class="pi pi-star-fill text-[0.6rem]"></i>
+            <span class="text-[0.72rem] font-medium">{{ medico.rating }}</span>
+          </div>
+        </div>
+      </div>
+      }
     </div>
 
   </div>

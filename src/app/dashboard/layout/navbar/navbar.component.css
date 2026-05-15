@@ -171,42 +171,44 @@
   font-size: 0.75rem;
   font-weight: 600;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #005b94, #0077bc) !important;
+  color: white !important;
 }
 
 /* ─── Dark mode ─────────────────────────────────────────────── */
 :host-context(.dark) {
   & .navbar {
-    background: #1e293b;
-    border-bottom-color: #334155;
+    background: #141414;
+    border-bottom-color: #232323;
   }
 
   & .collapse-btn,
   & .hamburger-btn,
   & .icon-btn {
-    color: #94a3b8;
+    color: #a1a1a1;
 
     &:hover {
-      background: #334155;
-      color: #e2e8f0;
+      background: #232323;
+      color: #e5e5e5;
     }
   }
 
   & .logout-btn {
     &:hover {
-      background: #450a0a;
+      background: #2d1111;
       color: #f87171;
     }
   }
 
   & .user-name {
-    color: #e2e8f0;
+    color: #e5e5e5;
   }
 
   & .v-divider {
-    background: #334155;
+    background: #2a2a2a;
   }
 
   & .notif-count {
-    border-color: #1e293b;
+    border-color: #141414;
   }
 }

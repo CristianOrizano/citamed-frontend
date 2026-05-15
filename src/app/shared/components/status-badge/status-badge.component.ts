@@ -50,6 +50,7 @@ const FALLBACK: BadgeConfig = {
   selector: 'app-status-badge',
   standalone: true,
   imports: [NgClass],
+  styles: [':host { display: contents; }'],
   template: `
     <span class="inline-flex items-center gap-1.5 text-[0.71rem] font-semibold px-2.5 py-0.5 rounded-full ring-1 ring-inset"
           [ngClass]="config().container">

@@ -64,6 +64,10 @@
 /* ─── Dark mode ────────────────────────────────────────────── */
 :host-context(.dark) {
   .layout-wrapper {
-    background-color: #0f172a;
+    background-color: #0f0f0f;
+  }
+
+  .page-content::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
   }
 }

@@ -1,15 +1,15 @@
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface LoginResponse {
-  responseInfo: {
-    code: string;
-    message: string;
-  };
-  result: {
-    tokenAccess: string;
-  };
-  expiresOn?: string; // backend aún no lo envía
+  accessToken: string;
+  expiresIn: number;
+}
+
+export interface MeResponse {
+  userId: string;
+  email: string;
+  role: 'PATIENT' | 'DOCTOR' | 'ADMIN';
 }

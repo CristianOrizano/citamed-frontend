@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,500&display=swap');
 
-@import "tailwindcss";
-@import "tailwindcss-primeui";
-@import "primeicons/primeicons.css";
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -18,7 +18,7 @@ body {
   margin: 0;
   padding: 0;
   font-family:
-    "Inter",
+    'Inter',
     system-ui,
     -apple-system,
     sans-serif;
@@ -34,13 +34,63 @@ body {
 .p-select,
 .p-textarea,
 .p-inputnumber input {
-  font-family: "Rubik", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family:
+    'Rubik',
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif !important;
   font-size: 13px !important;
 }
 
-/* ConfirmDialog — mensaje más compacto */
+/* Dark mode — layout global */
+.dark .layout-wrapper   { background-color: #090909 !important; }
+.dark .navbar           { background-color: #141414 !important; border-bottom-color: #272727 !important; }
+.dark .sidebar          { background-color: #141414 !important; border-right-color:  #272727 !important; }
+.dark .nav-item         { color: #c0c0c0 !important; }
+.dark .nav-item:hover   { color: #ffffff !important; background: rgba(255,255,255,0.06) !important; }
+.dark .nav-item.active  {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  box-shadow: inset 3px 0 0 #0077bc !important;
+}
+.dark .section-label    { color: #4a4a4a !important; }
+
+/* ConfirmDialog */
 .p-confirmdialog-message {
   font-size: 0.875rem !important;
+}
+.p-confirmdialog .p-button {
+  font-size: 0.875rem !important;
+}
+
+/* Toast compacto */
+.p-toast {
+  width: 22rem !important;
+}
+.p-toast .p-toast-message {
+  border-radius: 8px !important;
+}
+.p-toast .p-toast-message-content {
+  padding: 0.4rem 0.6rem !important;
+  gap: 0.5rem !important;
+}
+.p-toast .p-toast-summary {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+}
+.p-toast .p-toast-detail {
+  font-size: 0.8rem !important;
+}
+.p-toast .p-toast-message-icon {
+  font-size: 1rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+.p-toast .p-toast-close-button {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
 }
 
 /* Tooltip global */
@@ -59,9 +109,12 @@ body {
   letter-spacing: 0.06em;
   color: #64748b;
   padding: 0.7rem 1rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .p-datatable .p-datatable-tbody > tr > td {
@@ -81,38 +134,25 @@ body {
   border-radius: 0 0 12px 12px !important;
   font-size: 0.9rem !important;
   color: #64748b !important;
-  transition: background-color 0.25s ease, border-color 0.25s ease !important;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease !important;
 }
 
 /* Dark mode */
 .dark .p-datatable .p-datatable-thead > tr > th {
-  background: #1e293b;
-  color: #94a3b8;
-  border-bottom-color: #334155;
+  background: #242424;
+  color: #888888;
+  border-bottom-color: #333333;
 }
 
 .dark .p-datatable .p-datatable-tbody > tr > td {
-  border-bottom-color: #334155;
-  color: #e2e8f0 !important;
+  border-bottom-color: #272727;
+  color: #e5e5e5 !important;
 }
 
 .dark .p-datatable .p-paginator {
-  background: #1e293b !important;
-  border-top-color: #334155 !important;
-  color: #94a3b8 !important;
+  background: #1c1c1c !important;
+  border-top-color: #272727 !important;
+  color: #a1a1a1 !important;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

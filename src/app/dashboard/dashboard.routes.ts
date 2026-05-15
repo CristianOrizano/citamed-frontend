@@ -13,21 +13,41 @@ export const dashboardRoutes: Routes = [
       },
       {
         path: 'inicio',
-        loadComponent: () =>
-          import('./pages/home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./pages/home/home.component').then((m) => m.HomeComponent),
       },
       {
-        path: 'candidatos',
+        path: 'medicos',
         loadComponent: () =>
-          import('./pages/candidatos/candidatos.component').then(
-            (m) => m.CandidatosComponent,
+          import('./pages/doctors/views/list/list-doctors.component').then(
+            (m) => m.ListMedicosComponent,
           ),
       },
       {
-        path: 'users',
+        path: 'especialidades',
         loadComponent: () =>
-          import('./pages/users/views/list/list-users.component').then(
-            (m) => m.ListUsersComponent,
+          import('./pages/specialties/views/list/list-specialties.component').then(
+            (m) => m.ListEspecialidadesComponent,
+          ),
+      },
+      {
+        path: 'citas',
+        loadComponent: () =>
+          import('./pages/appointments/views/list/list-citas.component').then(
+            (m) => m.ListCitasComponent,
+          ),
+      },
+      {
+        path: 'horarios',
+        loadComponent: () =>
+          import('./pages/schedules/views/list/list-horarios.component').then(
+            (m) => m.ListHorariosComponent,
+          ),
+      },
+      {
+        path: 'metricas',
+        loadComponent: () =>
+          import('./pages/metrics/views/list/list-metricas.component').then(
+            (m) => m.ListMetricasComponent,
           ),
       },
     ],

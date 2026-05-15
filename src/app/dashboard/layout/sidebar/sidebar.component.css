@@ -10,18 +10,17 @@
 .sidebar {
   width: 260px;
   height: 100vh;
-  background-color: #0a1628;
+  background-color: #0d1f35;
   display: flex;
   flex-direction: column;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   position: relative;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
 
   &.collapsed {
     width: 72px;
 
-    & .logo-text,
     & .item-label,
     & .user-info,
     & .section-label {
@@ -30,8 +29,13 @@
       overflow: hidden;
     }
 
+    & .logo-img {
+      width: 34px;
+      max-width: 34px;
+    }
+
     & .sidebar-header {
-      padding: 0;
+      padding: 0 0.875rem;
     }
 
     & .logo-wrapper {
@@ -58,9 +62,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 75px;
+  height: 85px;
   flex-shrink: 0;
- 
+  padding: 0 0.875rem;
 }
 
 .logo-wrapper {
@@ -72,31 +76,16 @@
 }
 
 .logo-img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  display: block;
-  flex-shrink: 0;
-  filter: brightness(0) invert(1);
-}
-
-.logo-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  white-space: nowrap;
-  transition: opacity 0.2s ease, max-width 0.3s ease;
+  height: 40px;
+  width: auto;
+   margin: 4px 2px;
   max-width: 160px;
-  letter-spacing: 0.5px;
-}
-
-.logo-accent {
-  font-weight: 700;
-  background: linear-gradient(90deg, #a2c4f8 0%, #026ec7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  object-fit: cover;
+  object-position: left center;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+  flex-shrink: 0;
 }
 
 .mobile-close-btn {
@@ -146,7 +135,7 @@
   padding: 0.5rem 0.75rem;
 
   & + & {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     padding-top: 0.5rem;
   }
 }
@@ -156,7 +145,7 @@
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.09em;
-  color: #475569;
+  color: #3d6080;
   padding: 0 0.5rem;
   margin-bottom: 0.25rem;
   white-space: nowrap;
@@ -171,7 +160,7 @@
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
-  color: #94a3b8;
+  color: #8eacc8;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -181,17 +170,17 @@
   position: relative;
 
   &:hover {
-    color: #e2e8f0;
-    background: rgba(255, 255, 255, 0.06);
+    color: #c8ddf0;
+    background: rgba(0, 119, 188, 0.10);
   }
 
   &.active {
     color: white;
-    background: rgba(37, 99, 235, 0.15);
-    box-shadow: inset 3px 0 0 var(--p-primary-400), inset 14px 0 18px -8px rgba(96, 165, 250, 0.18);
+    background: rgba(0, 91, 148, 0.25);
+    box-shadow: inset 3px 0 0 #0077bc, inset 14px 0 18px -8px rgba(0, 119, 188, 0.20);
 
     & .item-icon-wrap i {
-      color: var(--p-primary-400);
+      color: #4db8f0;
     }
   }
 }
@@ -223,7 +212,7 @@
 /* ─── Footer ─────────────────────────────────────────────── */
 .sidebar-footer {
   padding: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
 
@@ -238,7 +227,7 @@
   overflow: hidden;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 119, 188, 0.09);
   }
 }
 
@@ -261,7 +250,7 @@
 
 .user-role {
   font-size: 0.68rem;
-  color: #64748b;
+  color: #3d6080;
   white-space: nowrap;
 }
 
@@ -283,12 +272,34 @@
   }
 }
 
+/* ─── Dark mode ─────────────────────────────────────────── */
+:host-context(.dark) .sidebar {
+  background-color: #0a0a0a;
+  border-right-color: #1e1e1e;
+}
+
+:host-context(.dark) .nav-section + .nav-section {
+  border-top-color: #1e1e1e;
+}
+
+:host-context(.dark) .sidebar-footer {
+  border-top-color: #1e1e1e;
+}
+
+:host-context(.dark) .section-label {
+  color: #3a3a3a;
+}
+
+:host-context(.dark) .user-role {
+  color: #3a3a3a;
+}
+
 /* ─── PrimeNG overrides ──────────────────────────────────── */
 ::ng-deep .sidebar-avatar {
   width: 32px !important;
   height: 32px !important;
   font-size: 0.68rem !important;
-  background: var(--p-primary-700) !important;
+  background: linear-gradient(135deg, #005b94, #0077bc) !important;
   color: white !important;
   flex-shrink: 0;
 }

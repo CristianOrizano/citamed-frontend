@@ -1,72 +1,176 @@
-<div class="flex h-screen">
+<div class="flex h-screen overflow-hidden">
 
-  <!-- Panel izquierdo -->
-  <div class="relative w-[46%] hidden lg:flex flex-col overflow-hidden">
-    <img src="images/tutor.webp" alt="background" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="login-overlay"></div>
-   <div class="login-brand__orb"></div>
-    <div class="login-brand__orb-2"></div>
-    <div class="relative z-10 px-10 py-8">
-      <img src="images/logo-valtx.png" alt="Valtx" class="valtx-logo h-10 object-contain" />
+  <!-- ── LEFT PANEL ─────────────────────────────────────────────────────── -->
+  <div class="login-grid relative w-[50%] hidden lg:flex flex-col overflow-hidden">
+
+    <!-- Decorative blur orbs -->
+    <div class="absolute -top-32 -left-32 w-[28rem] h-[28rem] rounded-full
+                bg-blue-500/20 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-6 w-72 h-72 rounded-full
+                bg-violet-500/15 blur-3xl pointer-events-none"></div>
+    <div class="absolute top-2/3 left-1/4 w-48 h-48 rounded-full
+                bg-sky-400/10 blur-2xl pointer-events-none"></div>
+
+    <!-- Logo -->
+    <div class="relative z-10 px-10 py-8 flex-shrink-0">
+      <img src="/icons/citamed-logo.svg" alt="CitaMed" class="h-12 w-auto" />
     </div>
 
-    <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-3 p-8">
-      <img src="images/logoIA.png" alt="tutorIA" class="tutor-logo w-[360px] object-contain mb-2" />
-      <p class="text-[1.65rem] text-white/90 m-0 font-medium">
-        Gestiona con <em class="not-italic font-normal text-sky-400 [font-family:Pacifico,cursive]">inteligencia</em>
-      </p>
-      <p class="text-[0.9rem] text-white/50 m-0 leading-[1.7]">Administra el contenido de TutorIA<br>desde un solo lugar</p>
+    <!-- Main content -->
+    <div class="relative z-10 flex-1 flex flex-col justify-center px-10 pb-4 gap-8">
+
+      <!-- Headline block -->
+      <div class="flex flex-col gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-white/8 border border-white/10
+                    flex items-center justify-center">
+          <i class="pi pi-calendar-plus text-white text-[1.4rem]"></i>
+        </div>
+        <div>
+          <h1 class="text-[2rem] font-bold text-white m-0 leading-[1.2]">
+            Plataforma de<br>
+            <span class="text-sky-400">salud digital</span>
+          </h1>
+          <p class="text-[0.85rem] text-white/45 m-0 mt-3 leading-[1.8] max-w-[275px]">
+            Conecta médicos, pacientes y citas en un sistema unificado e inteligente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature cards -->
+      <div class="flex flex-col gap-2">
+
+        <div class="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl
+                    px-4 py-3 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-400/20 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-calendar text-blue-300 text-sm"></i>
+          </div>
+          <div>
+            <p class="text-white text-[0.82rem] font-semibold m-0">Agenda en línea</p>
+            <p class="text-white/45 text-[0.72rem] m-0">Gestiona citas en tiempo real</p>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl
+                    px-4 py-3 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-400/20 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-file-edit text-emerald-300 text-sm"></i>
+          </div>
+          <div>
+            <p class="text-white text-[0.82rem] font-semibold m-0">Recetas digitales</p>
+            <p class="text-white/45 text-[0.72rem] m-0">Historial clínico centralizado</p>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl
+                    px-4 py-3 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-violet-400/20 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-chart-bar text-violet-300 text-sm"></i>
+          </div>
+          <div>
+            <p class="text-white text-[0.82rem] font-semibold m-0">Métricas de clínica</p>
+            <p class="text-white/45 text-[0.72rem] m-0">Reportes y estadísticas avanzadas</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Stats strip -->
+      <div class="flex items-center gap-6 pt-6 border-t border-white/8">
+        <div class="flex flex-col items-center gap-0.5">
+          <span class="text-xl font-bold text-white">+500</span>
+          <span class="text-[0.65rem] text-white/35 uppercase tracking-widest">Pacientes</span>
+        </div>
+        <div class="w-px h-7 bg-white/10"></div>
+        <div class="flex flex-col items-center gap-0.5">
+          <span class="text-xl font-bold text-white">24 / 7</span>
+          <span class="text-[0.65rem] text-white/35 uppercase tracking-widest">Disponible</span>
+        </div>
+        <div class="w-px h-7 bg-white/10"></div>
+        <div class="flex flex-col items-center gap-0.5">
+          <span class="text-xl font-bold text-white">100 %</span>
+          <span class="text-[0.65rem] text-white/35 uppercase tracking-widest">Seguro</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="relative z-10 px-10 py-7 text-[0.72rem] text-white/40 tracking-[0.05em]">
-      <span>— DESARROLLADO POR <strong class="text-white/70">VALTX</strong></span>
+    <!-- Panel footer -->
+    <div class="relative z-10 px-10 py-5 border-t border-white/5 flex-shrink-0">
+      <span class="text-[0.69rem] text-white/25 tracking-[0.06em]">
+        CitaMed © {{ year }} · Plataforma de salud digital
+      </span>
     </div>
+
   </div>
 
-  <!-- Panel derecho -->
-  <div class="flex-1 flex items-center justify-center bg-[#fafaf9] px-16 py-8 max-sm:px-5 max-sm:pt-12 max-sm:items-start">
-    <div class="w-full max-w-[420px] flex flex-col items-center gap-6 max-sm:max-w-full">
+  <!-- ── RIGHT PANEL ────────────────────────────────────────────────────── -->
+  <div class="flex-1 flex items-center justify-center login-right
+              px-8 py-10 overflow-y-auto">
 
-      <div class="inline-flex items-center gap-1.5 px-[0.9rem] py-[0.35rem] rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-[0.65rem] font-bold tracking-[0.08em]">
-        <i class="pi pi-shield"></i>
-        <span>ACCESO SEGURO</span>
+    <div class="w-full max-w-[400px] flex flex-col gap-7">
+
+      <!-- Badge + Title -->
+      <div class="flex flex-col items-center gap-4 text-center">
+
+        <div class="flex flex-col items-center gap-1">
+          <h2 class="font-extrabold text-[1.90rem] m-0  leading-tight tracking-[-0.02em]
+                     text-slate-800 dark:text-white">
+            Bienvenido de vuelta
+          </h2>
+         
+          <p class="text-[0.8rem] text-slate-400 dark:text-slate-500 m-0 mt-1
+                    leading-relaxed max-w-[240px] text-center">
+            Ingresa tus credenciales para continuar
+          </p>
+        </div>
+
       </div>
 
-      <div class="flex flex-col items-center gap-[0.35rem] text-center">
-        <h2 class="login-card__title">
-          Bienvenido a <span class="app-highlight">TutorIA</span>
-        </h2>
-        <p class="text-[0.88rem] text-slate-600 mt-1">Ingresa tus credenciales para continuar.</p>
-      </div>
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 w-full">
-
-        <div class="flex flex-col gap-2">
-          <label for="username" class="text-[0.75rem] font-semibold tracking-[0.05em] text-slate-600">Usuario</label>
+        <!-- Email -->
+        <div class="flex flex-col gap-1.5">
+          <label for="email"
+                 class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
+            Correo electrónico
+          </label>
           <p-iconfield>
-            <p-inputicon><img src="icons/icon-user.svg" class="w-[18px] h-[18px] opacity-70" /></p-inputicon>
+            <p-inputicon class="pi pi-envelope" />
             <input
               pInputText
-              id="username"
-              type="text"
-              formControlName="username"
-              placeholder="Ingresa tu usuario"
-              [invalid]="username.invalid && username.touched"
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="correo@ejemplo.com"
+              [invalid]="email.invalid && email.touched"
               class="w-full"
             />
           </p-iconfield>
-          @if (username.invalid && username.touched) {
-            <small class="flex items-center gap-1.5 text-red-600 font-medium text-[0.80rem]">
-              <i class="pi pi-exclamation-circle text-[0.80rem]"></i>
-              El usuario es requerido
+          @if (email.invalid && email.touched) {
+            <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
+              <i class="pi pi-exclamation-circle"></i>
+              @if (email.errors?.['required']) { El correo es requerido }
+              @else { Ingresa un correo válido }
             </small>
           }
         </div>
 
-        <div class="flex flex-col gap-2">
-          <label for="password" class="text-[0.75rem] font-semibold tracking-[0.05em]  text-slate-600">Contraseña</label>
-          <div class="relative w-full">
-            <img src="icons/icon-password.svg" class="absolute left-3 top-1/2 -translate-y-1/2 w-[18px] h-[18px] opacity-70 z-[2] pointer-events-none" />
+        <!-- Password -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <label for="password"
+                   class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
+              Contraseña
+            </label>
+            <a href="#"
+               class="text-[0.73rem] font-medium no-underline transition-colors duration-150"
+               style="color: #0077bc">
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+          <p-iconfield>
+            <p-inputicon class="pi pi-lock" />
             <p-password
               id="password"
               formControlName="password"
@@ -77,27 +181,32 @@
               class="w-full"
               inputStyleClass="w-full pl-9"
             />
-          </div>
-          <a href="#" class="text-[0.8rem] text-blue-600 no-underline font-semibold self-end order-10 hover:text-blue-800 transition-colors duration-150 p-2">¿Olvidaste tu contraseña?</a>
+          </p-iconfield>
           @if (password.invalid && password.touched) {
-            <small class="flex items-center gap-1.5 text-red-600 font-medium text-[0.80rem] order-5">
-              <i class="pi pi-exclamation-circle text-[0.80rem]"></i>
+            <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
+              <i class="pi pi-exclamation-circle"></i>
               @if (password.errors?.['required']) { La contraseña es requerida }
-              @else { Mínimo 6 caracteres }
+              @else { Mínimo 3 caracteres }
             </small>
           }
         </div>
 
+        <!-- API error -->
         @if (errorMessage()) {
-          <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 border border-red-100">
-            <i class="pi pi-exclamation-circle text-red-400 text-sm"></i>
-            <span class="text-red-500 text-[0.8rem]">{{ errorMessage() }}</span>
+          <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl
+                      bg-red-50 dark:bg-red-950/40
+                      border border-red-100 dark:border-red-900/60">
+            <i class="pi pi-exclamation-circle text-red-500 text-sm flex-shrink-0"></i>
+            <span class="text-red-600 dark:text-red-400 text-[0.8rem] font-medium">
+              {{ errorMessage() }}
+            </span>
           </div>
         }
 
+        <!-- Submit -->
         <p-button
           type="submit"
-          label="Ingresar al panel"
+          label="Iniciar sesión"
           icon="pi pi-sign-in"
           styleClass="login-btn"
           [loading]="loading()"
@@ -106,11 +215,15 @@
 
       </form>
 
-      <div class="flex flex-col items-center gap-1.5 w-full border-t border-[#e2ddd6] pt-4">
-        <span class="flex items-center gap-1.5 text-[0.78rem] text-slate-400">
-          <i class="pi pi-lock"></i> Panel seguro y encriptado
+      <!-- Security footer -->
+      <div class="flex flex-col items-center gap-1.5">
+        <span class="flex items-center gap-1.5 text-[0.75rem] text-slate-400">
+          <i class="pi pi-lock text-[0.7rem]"></i>
+          Panel de administración seguro y encriptado
         </span>
-        <span class="text-[0.75rem] text-slate-400">TutorIA © {{ year }} · Todos los derechos reservados</span>
+        <span class="text-[0.80rem] text-slate-300 dark:text-slate-600">
+          CitaMed © {{ year }} · Todos los derechos reservados
+        </span>
       </div>
 
     </div>

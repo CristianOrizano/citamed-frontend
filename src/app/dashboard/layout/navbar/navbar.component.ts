@@ -26,7 +26,7 @@ export class NavbarComponent {
   readonly notifications = 5;
 
   get username(): string {
-    return this.tokenService.getUsername() ?? 'Usuario';
+    return this.tokenService.getUser()?.email ?? 'Usuario';
   }
 
   get initials(): string {

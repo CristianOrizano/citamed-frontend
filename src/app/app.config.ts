@@ -7,21 +7,22 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { ThemeService } from './shared/services/theme.service';
 import { providePrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
 
 const BluePreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50:  '{blue.50}',
-      100: '{blue.100}',
-      200: '{blue.200}',
-      300: '{blue.300}',
-      400: '{blue.400}',
-      500: '{blue.500}',
-      600: '{blue.600}',
-      700: '{blue.700}',
-      800: '{blue.800}',
-      900: '{blue.900}',
-      950: '{blue.950}',
+      50:  '#e6f2fa',
+      100: '#cce5f5',
+      200: '#99cbeb',
+      300: '#4da6d6',
+      400: '#0077bc',
+      500: '#005b94',
+      600: '#004a7a',
+      700: '#003a60',
+      800: '#002a47',
+      900: '#001a2e',
+      950: '#000d17',
     },
   }
 });
@@ -40,5 +41,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideAppInitializer(() => inject(ThemeService).init()),
+    MessageService,
   ]
 };

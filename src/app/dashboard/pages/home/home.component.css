@@ -1,0 +1,33 @@
+/* ─── Avatar médicos ─────────────────────────────────────── */
+.avatar-medico {
+  background: linear-gradient(135deg, #005b94, #0077bc);
+}
+
+/* ─── Estado badges ──────────────────────────────────────── */
+.estado-confirmada {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.estado-programada {
+  background: #eff6ff;
+  color: #0077bc;
+}
+
+.estado-completada {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.estado-cancelada {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* ─── Dark mode overrides ────────────────────────────────── */
+:host-context(.dark) {
+  .estado-confirmada { background: rgba(22, 163, 74, 0.15);   color: #4ade80; }
+  .estado-programada { background: rgba(0, 119, 188, 0.15);   color: #60b4f0; }
+  .estado-completada { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+  .estado-cancelada  { background: rgba(220, 38, 38, 0.15);   color: #f87171; }
+}

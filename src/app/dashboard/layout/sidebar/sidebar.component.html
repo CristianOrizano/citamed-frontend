@@ -1,10 +1,9 @@
-<aside class="sidebar" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
+<aside class="sidebar dark:bg-[#141414] dark:border-r-[#272727]" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
 
   <!-- Header: Logo -->
-  <div class="sidebar-header  mx-4 mt-5 px-8">
-    <div class="logo-wrapper ">
-      <img src="icons/image101.svg" alt="tutorIA" class="logo-img" />
-      <span class="logo-text " >Tutor<span class="logo-accent font-extrabold">IA</span></span>
+  <div class="sidebar-header ">
+    <div class="logo-wrapper">
+      <img src="/icons/citamed-logo.svg" class="logo-img" alt="CitaMed" />
     </div>
     <button class="mobile-close-btn" (click)="mobileClose.emit()">
       <i class="pi pi-times"></i>
@@ -14,25 +13,7 @@
   <!-- Navigation -->
   <nav class="sidebar-nav">
 
-    <!-- Dashboard (standalone, sin acordeón) -->
-    <div class="nav-section">
-      @for (item of topItems; track item.route) {
-        <a
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }"
-          class="nav-item"
-          [pTooltip]="item.label"
-          tooltipPosition="right"
-          (click)="mobileOpen && mobileClose.emit()"
-        >
-          <span class="item-icon-wrap"><i [class]="item.icon"></i></span>
-          <span class="item-label">{{ item.label }}</span>
-        </a>
-      }
-    </div>
-
-    <!-- Secciones planas -->
+    <!-- Secciones -->
     @for (section of navSections; track section.title) {
       <div class="nav-section">
         <span class="section-label">{{ section.title }}</span>
@@ -55,6 +36,15 @@
 
   </nav>
 
-
+  <!-- User Profile Footer -->
+  <div class="sidebar-footer">
+    <div class="user-profile">
+      <p-avatar [label]="initials" shape="circle" styleClass="sidebar-avatar" />
+      <div class="user-info">
+        <span class="user-name">{{ displayName }}</span>
+        <span class="user-role">{{ displayRole }}</span>
+      </div>
+    </div>
+  </div>
 
 </aside>
