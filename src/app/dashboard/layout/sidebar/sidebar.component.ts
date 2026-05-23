@@ -57,22 +57,22 @@ export class SidebarComponent {
     {
       title: 'GESTIÓN',
       items: [
-        { label: 'Médicos',        icon: 'pi pi-user-plus', route: '/dashboard/medicos' },
-        { label: 'Especialidades', icon: 'pi pi-star',      route: '/dashboard/especialidades' },
-        { label: 'Usuarios',       icon: 'pi pi-users',     route: '/dashboard/usuarios' },
+        { label: 'Médicos',        icon: 'pi pi-user-plus', route: '/dashboard/doctors' },
+        { label: 'Especialidades', icon: 'pi pi-star',      route: '/dashboard/specialties' },
+        { label: 'Usuarios',       icon: 'pi pi-users',     route: '/dashboard/users' },
       ],
     },
     {
       title: 'OPERACIONES',
       items: [
-        { label: 'Citas',     icon: 'pi pi-calendar', route: '/dashboard/citas' },
-        { label: 'Horarios',  icon: 'pi pi-clock',    route: '/dashboard/horarios' },
+        { label: 'Citas',     icon: 'pi pi-calendar', route: '/dashboard/appointments' },
+        { label: 'Horarios',  icon: 'pi pi-clock',    route: '/dashboard/schedules' },
       ],
     },
     {
       title: 'REPORTES',
       items: [
-        { label: 'Métricas', icon: 'pi pi-chart-bar', route: '/dashboard/metricas' },
+        { label: 'Métricas', icon: 'pi pi-chart-bar', route: '/dashboard/metrics' },
       ],
     },
   ];

@@ -117,7 +117,7 @@
                      text-slate-800 dark:text-white">
             Bienvenido de vuelta
           </h2>
-         
+
           <p class="text-[0.8rem] text-slate-400 dark:text-slate-500 m-0 mt-1
                     leading-relaxed max-w-[240px] text-center">
             Ingresa tus credenciales para continuar
@@ -131,28 +131,20 @@
 
         <!-- Email -->
         <div class="flex flex-col gap-1.5">
-          <label for="email"
-                 class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
+          <label for="email" class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
             Correo electrónico
           </label>
           <p-iconfield>
             <p-inputicon class="pi pi-envelope" />
-            <input
-              pInputText
-              id="email"
-              type="email"
-              formControlName="email"
-              placeholder="correo@ejemplo.com"
-              [invalid]="email.invalid && email.touched"
-              class="w-full"
-            />
+            <input pInputText id="email" type="email" formControlName="email" placeholder="correo@ejemplo.com"
+              [invalid]="email.invalid && email.touched" class="w-full" />
           </p-iconfield>
           @if (email.invalid && email.touched) {
-            <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
-              <i class="pi pi-exclamation-circle"></i>
-              @if (email.errors?.['required']) { El correo es requerido }
-              @else { Ingresa un correo válido }
-            </small>
+          <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
+            <i class="pi pi-exclamation-circle"></i>
+            @if (email.errors?.['required']) { El correo es requerido }
+            @else { Ingresa un correo válido }
+          </small>
           }
         </div>
 
@@ -160,58 +152,44 @@
         <div class="flex flex-col gap-1.5">
           <div class="flex items-center justify-between">
             <label for="password"
-                   class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
+              class="text-[0.73rem] font-semibold text-slate-600 dark:text-slate-400 tracking-[0.04em]">
               Contraseña
             </label>
-            <a href="#"
-               class="text-[0.73rem] font-medium no-underline transition-colors duration-150"
-               style="color: #0077bc">
+            <a href="#" class="text-[0.73rem] font-medium no-underline transition-colors duration-150"
+              style="color: #0077bc">
               ¿Olvidaste tu contraseña?
             </a>
           </div>
           <p-iconfield>
             <p-inputicon class="pi pi-lock" />
-            <p-password
-              id="password"
-              formControlName="password"
-              placeholder="Ingresa tu contraseña"
-              [feedback]="false"
-              [toggleMask]="true"
-              [invalid]="password.invalid && password.touched"
-              class="w-full"
-              inputStyleClass="w-full pl-9"
-            />
+            <p-password id="password" formControlName="password" placeholder="Ingresa tu contraseña" [feedback]="false"
+              [toggleMask]="true" [invalid]="password.invalid && password.touched" class="w-full"
+              inputStyleClass="w-full pl-9" />
           </p-iconfield>
           @if (password.invalid && password.touched) {
-            <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
-              <i class="pi pi-exclamation-circle"></i>
-              @if (password.errors?.['required']) { La contraseña es requerida }
-              @else { Mínimo 3 caracteres }
-            </small>
+          <small class="flex items-center gap-1.5 text-red-500 text-[0.78rem] font-medium">
+            <i class="pi pi-exclamation-circle"></i>
+            @if (password.errors?.['required']) { La contraseña es requerida }
+            @else { Mínimo 3 caracteres }
+          </small>
           }
         </div>
 
         <!-- API error -->
         @if (errorMessage()) {
-          <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl
+        <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl
                       bg-red-50 dark:bg-red-950/40
                       border border-red-100 dark:border-red-900/60">
-            <i class="pi pi-exclamation-circle text-red-500 text-sm flex-shrink-0"></i>
-            <span class="text-red-600 dark:text-red-400 text-[0.8rem] font-medium">
-              {{ errorMessage() }}
-            </span>
-          </div>
+          <i class="pi pi-exclamation-circle text-red-500 text-sm flex-shrink-0"></i>
+          <span class="text-red-600 dark:text-red-400 text-[0.8rem] font-medium">
+            {{ errorMessage() }}
+          </span>
+        </div>
         }
 
         <!-- Submit -->
-        <p-button
-          type="submit"
-          label="Iniciar sesión"
-          icon="pi pi-sign-in"
-          styleClass="login-btn"
-          [loading]="loading()"
-          [disabled]="loading()"
-        />
+        <p-button type="submit" label="Iniciar sesión" icon="pi pi-sign-in" styleClass="login-btn" [loading]="loading()"
+          [disabled]="loading()" />
 
       </form>
 

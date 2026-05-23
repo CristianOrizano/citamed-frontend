@@ -1,16 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { PRIMENG_UI } from '../../../../../shared/primeNG/primeng-ui';
 import { PRIMENG_OVERLAY } from '../../../../../shared/primeNG/primeng-overlay';
 import { PRIMENG_TABLE } from '../../../../../shared/primeNG/primeng-table';
 import { PRIMENG_FORMS } from '../../../../../shared/primeNG/primeng-forms';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { TableLazyLoadEvent } from 'primeng/table';
+import { ConfirmationService } from 'primeng/api';
+import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { StatusBadgeComponent } from '../../../../../shared/components/status-badge/status-badge.component';
 import { TableSkeletonRowComponent } from '../../../../../shared/components/table-skeleton-row/table-skeleton-row.component';
 import { DoctorFormDialogComponent } from '../../components/medico-form-dialog/doctor-form-dialog.component';
 import { DoctorsService } from '../../services/doctors.service';
-import { DialogMode, Doctor } from '../../interfaces/doctor.interface';
+import { ToastService } from '../../../../../shared/services/toast.service';
+import { DialogMode, Doctor, DoctorFilterRequest, SpecialtyOption } from '../../interfaces/doctor.interface';
 
 @Component({
   selector: 'app-list-medicos',
@@ -25,14 +27,16 @@ import { DialogMode, Doctor } from '../../interfaces/doctor.interface';
     DoctorFormDialogComponent,
     TableSkeletonRowComponent,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService],
   templateUrl: './list-doctors.component.html',
   styleUrl: './list-doctors.component.css',
 })
 export class ListMedicosComponent {
-  private doctorsService = inject(DoctorsService);
-  private confirmation   = inject(ConfirmationService);
-  private toast          = inject(MessageService);
+  @ViewChild('dt') dt!: Table;
+
+  private readonly doctorsService = inject(DoctorsService);
+  private readonly confirmation   = inject(ConfirmationService);
+  private readonly toast          = inject(ToastService);
 
   doctors      = signal<Doctor[]>([]);
   totalRecords = signal(0);
@@ -42,40 +46,64 @@ export class ListMedicosComponent {
   readonly tableRows    = 10;
   readonly skeletonRows = Array(this.tableRows).fill({});
 
-  dialogVisible          = false;
+  dialogVisible          = signal(false);
   dialogMode: DialogMode = 'create';
   selectedDoctor: Partial<Doctor> | null = null;
 
-  filterName      = '';
-  filterSpecialty = '';
+  filter: DoctorFilterRequest = {
+    page: 1,
+    size: this.tableRows,
+    sortBy: 'createdAt',
+    sortDir: 'desc',
+  };
+
+  readonly specialtyOptions = toSignal(
+    this.doctorsService.getSpecialtyOptions(),
+    { initialValue: [] as SpecialtyOption[] }
+  );
+
+  readonly activeOptions = [
+    { label: 'Activo',   value: true  },
+    { label: 'Inactivo', value: false },
+  ];
 
   private readonly avatarColors = [
     'bg-blue-500', 'bg-violet-500', 'bg-teal-500',
     'bg-orange-400', 'bg-rose-500', 'bg-emerald-500', 'bg-indigo-500',
   ];
 
-  readonly specialtyOptions = [
-    'Cardiología', 'Pediatría', 'Neonatología', 'Dermatología',
-    'Neurología', 'Ortopedia', 'Traumatología', 'Ginecología', 'Obstetricia',
-  ];
-
   loadDoctors(event: TableLazyLoadEvent): void {
     const first = event.first ?? 0;
-    const rows  = event.rows  ?? 10;
-    const page  = Math.floor(first / rows) + 1;
+    const rows  = event.rows  ?? this.tableRows;
+
+    this.filter = { ...this.filter, page: Math.floor(first / rows) + 1, size: rows };
 
     this.loading.set(true);
-    this.doctorsService.getDoctors(page, rows).subscribe({
-      next: ({ totalElements, doctors }) => {
-        this.doctors.set(doctors);
+    this.doctorsService.getDoctors(this.filter).subscribe({
+      next: ({ content, totalElements }) => {
+        this.doctors.set(content);
         this.totalRecords.set(totalElements);
         this.loading.set(false);
       },
       error: () => {
         this.loading.set(false);
-        this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los médicos.' });
+        this.toast.error('No se pudo cargar los médicos.');
       },
     });
+  }
+
+  search(): void {
+    this.filter = {
+      ...this.filter,
+      name:          this.filter.name?.trim(),
+      licenseNumber: this.filter.licenseNumber?.trim(),
+    };
+    this.dt.reset();
+  }
+
+  clearFilters(): void {
+    this.filter = { page: 1, size: this.tableRows, sortBy: 'createdAt', sortDir: 'desc' };
+    this.dt.reset();
   }
 
   getInitials(d: Doctor): string {
@@ -86,46 +114,47 @@ export class ListMedicosComponent {
     return this.avatarColors[id.charCodeAt(0) % this.avatarColors.length];
   }
 
-  clearFilters(): void {
-    this.filterName      = '';
-    this.filterSpecialty = '';
-  }
-
   openCreate(): void {
     this.selectedDoctor = null;
     this.dialogMode     = 'create';
-    this.dialogVisible  = true;
+    this.dialogVisible.set(true);
   }
 
   openEdit(d: Doctor): void {
     this.selectedDoctor = { ...d };
     this.dialogMode     = 'edit';
-    this.dialogVisible  = true;
+    this.dialogVisible.set(true);
   }
 
   openView(d: Doctor): void {
     this.selectedDoctor = { ...d };
     this.dialogMode     = 'view';
-    this.dialogVisible  = true;
+    this.dialogVisible.set(true);
   }
 
-  onSave(data: Partial<Doctor>): void {
-    this.toast.add({ severity: 'success', summary: 'Guardado', detail: 'Médico guardado correctamente.' });
+  onSaved(): void {
+    this.dt.reset();
   }
 
   confirmToggle(d: Doctor): void {
-    const action = d.isActive ? 'desactivar' : 'activar';
+    const action = d.active ? 'desactivar' : 'activar';
     const name   = `${d.firstName} ${d.lastName}`;
     this.confirmation.confirm({
       message:                `¿Deseas ${action} al Dr. <strong>${name}</strong>?`,
       header:                 `Confirmar ${action}`,
-      icon:                   d.isActive ? 'pi pi-ban' : 'pi pi-check-circle',
+      icon:                   d.active ? 'pi pi-ban' : 'pi pi-check-circle',
       acceptLabel:            `Sí, ${action}`,
       rejectLabel:            'Cancelar',
-      acceptButtonStyleClass: d.isActive ? 'p-button-danger' : 'p-button-success',
+      acceptButtonStyleClass: d.active ? 'p-button-danger' : 'p-button-success',
       rejectButtonStyleClass: 'p-button-text',
       accept: () => {
-        this.toast.add({ severity: 'info', summary: 'Pendiente', detail: 'Acción aún no conectada al API.' });
+        this.doctorsService.deleteDoctor(d.id).subscribe({
+          next: () => {
+            this.toast.success(`Dr. ${name} ${d.active ? 'desactivado' : 'activado'} correctamente.`);
+            this.dt.reset();
+          },
+          error: () => this.toast.error(`No se pudo ${action} al médico.`),
+        });
       },
     });
   }

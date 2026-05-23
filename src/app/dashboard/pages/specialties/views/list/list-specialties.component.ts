@@ -31,22 +31,22 @@ import {
   templateUrl: './list-specialties.component.html',
   styleUrl: './list-specialties.component.css',
 })
-export class ListEspecialidadesComponent {
+export class ListSpecialtiesComponent {
   @ViewChild('dt') dt!: Table;
 
   private readonly specialtiesService = inject(SpecialtiesService);
-  private readonly confirmation        = inject(ConfirmationService);
-  private readonly toast               = inject(ToastService);
+  private readonly confirmation = inject(ConfirmationService);
+  private readonly toast = inject(ToastService);
 
-  specialties  = signal<SpecialtyResponse[]>([]);
+  specialties = signal<SpecialtyResponse[]>([]);
   totalRecords = signal(0);
-  loading      = signal(false);
+  loading = signal(false);
 
   readonly tableColumns = 4;
-  readonly tableRows    = 10;
+  readonly tableRows = 10;
   readonly skeletonRows = Array(this.tableRows).fill({});
 
-  dialogVisible        = signal(false);
+  dialogVisible = signal(false);
   dialogMode: DialogMode = 'create';
   selectedSpecialty: Partial<SpecialtyResponse> | null = null;
 
@@ -59,7 +59,7 @@ export class ListEspecialidadesComponent {
 
   loadSpecialties(event: TableLazyLoadEvent): void {
     const first = event.first ?? 0;
-    const rows  = event.rows  ?? this.tableRows;
+    const rows = event.rows ?? this.tableRows;
 
     this.filter = { ...this.filter, page: Math.floor(first / rows) + 1, size: rows };
 
@@ -111,11 +111,11 @@ export class ListEspecialidadesComponent {
   confirmToggle(e: SpecialtyResponse): void {
     const action = e.active ? 'desactivar' : 'activar';
     this.confirmation.confirm({
-      message:                `¿Deseas ${action} la especialidad <strong>${e.name}</strong>?`,
-      header:                 `Confirmar ${action}`,
-      icon:                   e.active ? 'pi pi-ban' : 'pi pi-check-circle',
-      acceptLabel:            `Sí, ${action}`,
-      rejectLabel:            'Cancelar',
+      message: `¿Deseas ${action} la especialidad <strong>${e.name}</strong>?`,
+      header: `Confirmar ${action}`,
+      icon: e.active ? 'pi pi-ban' : 'pi pi-check-circle',
+      acceptLabel: `Sí, ${action}`,
+      rejectLabel: 'Cancelar',
       acceptButtonStyleClass: e.active ? 'p-button-danger' : 'p-button-success',
       rejectButtonStyleClass: 'p-button-text',
       accept: () => {

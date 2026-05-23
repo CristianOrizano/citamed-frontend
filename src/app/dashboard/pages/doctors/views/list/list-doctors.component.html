@@ -6,33 +6,48 @@
       <h2 class="text-[1.75rem] font-bold text-(--p-text-color) m-0 tracking-[-0.7px]">Gestión de médicos</h2>
       <p class="text-sm text-(--p-text-muted-color) mt-1 m-0">Administra los médicos registrados en el sistema</p>
     </div>
-    <p-button label="Nuevo Médico" icon="pi pi-plus" (onClick)="openCreate()" />
+    <p-button label="Nuevo Médico" icon="pi pi-plus" size="small" (onClick)="openCreate()" />
+
   </div>
 
   <!-- Filtros -->
-  <div class="bg-white dark:bg-slate-800 border border-(--p-content-border-color) border-l-[3px] border-l-[#0077bc]
+  <div class="bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color)
               rounded-[14px] px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
 
       <div class="flex flex-col gap-1">
-        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Médico</label>
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Nombre</label>
         <p-iconfield>
           <p-inputicon class="pi pi-user" />
-          <input pInputText [(ngModel)]="filterName" placeholder="Buscar por nombre" class="w-full" />
+          <input pInputText [(ngModel)]="filter.name" placeholder="Buscar por nombre" class="w-full"
+            (keyup.enter)="search()" />
+        </p-iconfield>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">N° CMP</label>
+        <p-iconfield>
+          <p-inputicon class="pi pi-id-card" />
+          <input pInputText [(ngModel)]="filter.licenseNumber" placeholder="Buscar por CMP" class="w-full"
+            (keyup.enter)="search()" />
         </p-iconfield>
       </div>
 
       <div class="flex flex-col gap-1">
         <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Especialidad</label>
-        <p-iconfield>
-          <p-inputicon class="pi pi-star" />
-          <input pInputText [(ngModel)]="filterSpecialty" placeholder="Buscar especialidad" class="w-full" />
-        </p-iconfield>
+        <p-select [(ngModel)]="filter.specialtyId" [options]="specialtyOptions()" optionLabel="name" optionValue="id"
+          placeholder="Todas" [showClear]="true" appendTo="body" class="w-full" />
       </div>
 
-      <div class="sm:col-span-2 lg:col-span-1 flex gap-2 mb-0.5 items-center">
-        <p-button label="Buscar" icon="pi pi-search" size="small" [outlined]="true" />
-        <p-button icon="pi pi-filter-slash" [outlined]="true" severity="secondary"
+      <div class="flex flex-col gap-1">
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Estado</label>
+        <p-select [(ngModel)]="filter.active" [options]="activeOptions" optionLabel="label" optionValue="value"
+          placeholder="Todos" [showClear]="true" appendTo="body" class="w-full" />
+      </div>
+
+      <div class="flex gap-2 items-center mb-0.5">
+        <p-button label="Buscar" icon="pi pi-search" size="small" [outlined]="true" (onClick)="search()" />
+        <p-button icon="pi pi-filter-slash" size="small" [outlined]="true" severity="secondary"
           pTooltip="Limpiar filtros" tooltipPosition="top" (onClick)="clearFilters()" />
       </div>
 
@@ -40,28 +55,22 @@
   </div>
 
   <!-- Tabla -->
-  <div class="overflow-hidden rounded-[14px] border border-(--p-content-border-color) bg-white dark:bg-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
-    <p-table
-      [value]="loading() ? skeletonRows : doctors()"
-      [lazy]="true"
-      (onLazyLoad)="loadDoctors($event)"
-      [totalRecords]="totalRecords()"
-      [paginator]="true"
-      [rows]="tableRows"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-      [rowHover]="true"
+  <div
+    class="overflow-hidden rounded-[14px] border border-(--p-content-border-color) bg-white dark:bg-[#1c1c1c] shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+    <p-table #dt [value]="loading() ? skeletonRows : doctors()" [lazy]="true" (onLazyLoad)="loadDoctors($event)"
+      [totalRecords]="totalRecords()" [paginator]="true" [rows]="tableRows" [paginatorDropdownAppendTo]="'body'"
+      [rowsPerPageOptions]="[10, 25, 50]" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowHover]="true"
       [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }">
 
       <ng-template pTemplate="header">
         <tr>
-          <th style="width:27%">Médico</th>
+          <th style="width:25%">Médico</th>
           <th style="width:22%">Especialidades</th>
           <th style="width:16%">Teléfono</th>
           <th style="width:12%">Tarifa</th>
-          <th style="width:12%; text-align:center">Estado</th>
-          <th style="width:11%">
+          <th style="width:13%; text-align:center">Estado</th>
+          <th style="width:12%">
             <div class="flex justify-center">Acciones</div>
           </th>
         </tr>
@@ -69,73 +78,70 @@
 
       <ng-template pTemplate="body" let-m>
         @if (loading()) {
-          <tr appTableSkeletonRow [columns]="tableColumns"></tr>
+        <tr appTableSkeletonRow [columns]="tableColumns"></tr>
         } @else {
-          <tr>
+        <tr>
 
-            <!-- Médico -->
-            <td>
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-[0.72rem] font-bold flex-shrink-0"
-                  [ngClass]="getAvatarColor(m.id)">
-                  {{ getInitials(m) }}
-                </div>
-                <div class="min-w-0 overflow-hidden">
-                  <span class="block truncate font-bold text-(--p-text-color) text-[0.82rem] leading-tight tracking-wide">
-                    Dr. {{ m.firstName }} {{ m.lastName }}
-                  </span>
-                  <span class="block text-[0.73rem] text-(--p-text-muted-color) mt-0.5">
-                    {{ m.licenseNumber }}
-                  </span>
-                </div>
+          <!-- Médico -->
+          <td>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-9 h-9 rounded-full flex items-center justify-center text-white text-[0.72rem] font-bold flex-shrink-0 bg-slate-500"
+                [ngClass]="getAvatarColor(m.id)">
+                {{ getInitials(m) }}
               </div>
-            </td>
-
-            <!-- Especialidades -->
-            <td>
-              <div class="flex flex-wrap gap-1">
-                @for (spec of m.specialties; track spec) {
-                  <span class="text-[0.67rem] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300 whitespace-nowrap">
-                    {{ spec }}
-                  </span>
-                }
+              <div class="min-w-0 overflow-hidden">
+                <span class="block truncate font-bold text-(--p-text-color) text-[0.82rem] leading-tight ">
+                  Dr. {{ m.firstName }} {{ m.lastName }}
+                </span>
+                <span class="block text-[0.73rem] text-(--p-text-muted-color) mt-0.5">
+                  CMP-{{ m.licenseNumber }}
+                </span>
               </div>
-            </td>
+            </div>
+          </td>
 
-            <!-- Teléfono -->
-            <td class="text-[0.83rem] text-(--p-text-color)">{{ m.phone }}</td>
+          <!-- Especialidades -->
+          <td>
+            <div class="flex flex-wrap gap-1">
+              @for (spec of m.specialties; track spec.id) {
+              <span
+                class="text-[0.67rem] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300 whitespace-nowrap">
+                {{ spec.name }}
+              </span>
+              }
+            </div>
+          </td>
 
-            <!-- Tarifa -->
-            <td class="text-[0.83rem] font-semibold text-(--p-text-color)">
-              S/ {{ m.consultationFee | number:'1.2-2' }}
-            </td>
+          <!-- Teléfono -->
+          <td class="text-[0.83rem] text-(--p-text-color)">{{ m.phone }}</td>
 
-            <!-- Estado -->
-            <td>
-              <div class="flex justify-center">
-                <app-status-badge [value]="m.isActive" />
-              </div>
-            </td>
+          <!-- Tarifa -->
+          <td class="text-[0.83rem] font-semibold text-(--p-text-color)">
+            S/ {{ m.consultationFee | number:'1.2-2' }}
+          </td>
 
-            <!-- Acciones -->
-            <td>
-              <div class="flex items-center justify-center gap-0.5">
-                <p-button icon="pi pi-eye" [text]="true" [rounded]="true" severity="info" size="small"
-                  (onClick)="openView(m)" pTooltip="Ver detalle" tooltipPosition="top" />
-                <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="warn" size="small"
-                  (onClick)="openEdit(m)" pTooltip="Editar" tooltipPosition="top" />
-                <p-button
-                  [icon]="m.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"
-                  [text]="true" [rounded]="true"
-                  [severity]="m.isActive ? 'danger' : 'success'"
-                  size="small"
-                  (onClick)="confirmToggle(m)"
-                  [pTooltip]="m.isActive ? 'Desactivar' : 'Activar'"
-                  tooltipPosition="top" />
-              </div>
-            </td>
+          <!-- Estado -->
+          <td>
+            <div class="flex justify-center">
+              <app-status-badge [value]="m.active" />
+            </div>
+          </td>
 
-          </tr>
+          <!-- Acciones -->
+          <td>
+            <div class="flex items-center justify-center gap-0.5">
+              <p-button icon="pi pi-eye" [text]="true" [rounded]="true" severity="info" size="small"
+                (onClick)="openView(m)" pTooltip="Ver detalle" tooltipPosition="top" />
+              <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="warn" size="small"
+                (onClick)="openEdit(m)" pTooltip="Editar" tooltipPosition="top" />
+              <p-button [icon]="m.active ? 'pi pi-ban' : 'pi pi-check-circle'" [text]="true" [rounded]="true"
+                [severity]="m.active ? 'danger' : 'success'" size="small" (onClick)="confirmToggle(m)"
+                [pTooltip]="m.active ? 'Desactivar' : 'Activar'" tooltipPosition="top" />
+            </div>
+          </td>
+
+        </tr>
         }
       </ng-template>
 
@@ -157,11 +163,7 @@
 </div>
 
 <!-- Dialog -->
-<app-doctor-form-dialog
-  [(visible)]="dialogVisible"
-  [mode]="dialogMode"
-  [doctorData]="selectedDoctor"
-  (saved)="onSave($event)" />
+<app-doctor-form-dialog [(visible)]="dialogVisible" [mode]="dialogMode" [doctorData]="selectedDoctor"
+  [specialtyOptions]="specialtyOptions()" (saved)="onSaved()" />
 
 <p-confirmdialog />
-<p-toast position="top-right" />

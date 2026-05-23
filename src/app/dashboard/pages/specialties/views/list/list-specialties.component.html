@@ -11,7 +11,7 @@
   </div>
 
   <!-- Filtros -->
-  <div class="bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color) border-l-[3px] border-l-blue-500
+  <div class="bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color)
               rounded-[14px] px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
 
@@ -23,7 +23,7 @@
         </p-iconfield>
       </div>
 
-      <div class="flex gap-2 items-center self-end">
+      <div class="flex gap-2 items-center mb-0.5">
         <p-button label="Buscar" icon="pi pi-search" variant="outlined" size="small" (onClick)="search()" />
         <p-button icon="pi pi-filter-slash" [outlined]="true" size="small" severity="secondary"
           pTooltip="Limpiar filtros" tooltipPosition="top" (onClick)="clearFilters()" />
@@ -35,11 +35,11 @@
   <!-- Tabla -->
   <div
     class="overflow-hidden rounded-[14px] border border-(--p-content-border-color) bg-white dark:bg-[#1c1c1c] shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
-    <p-table [value]="loading() ? skeletonRows : specialties()" [lazy]="true"
-      (onLazyLoad)="loadSpecialties($event)" [totalRecords]="totalRecords()" [paginator]="true" [rows]="tableRows"
-      [rowsPerPageOptions]="[10, 25, 50]" [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowHover]="true"
-      [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }" #dt>
+    <p-table [value]="loading() ? skeletonRows : specialties()" [lazy]="true" (onLazyLoad)="loadSpecialties($event)"
+      [totalRecords]="totalRecords()" [paginator]="true" [rows]="tableRows" [rowsPerPageOptions]="[10, 25, 50]"
+      [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+      [rowHover]="true" [paginatorDropdownAppendTo]="'body'" [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }"
+      #dt>
 
       <ng-template pTemplate="header">
         <tr>

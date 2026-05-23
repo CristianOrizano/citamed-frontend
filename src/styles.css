@@ -31,7 +31,11 @@ body {
 .p-inputtext,
 .p-password input,
 .p-dropdown,
-.p-select,
+.p-select .p-select-label,
+.p-multiselect,
+.p-multiselect .p-multiselect-label,
+.p-multiselect-overlay .p-multiselect-option,
+.p-multiselect-overlay .p-multiselect-filter,
 .p-textarea,
 .p-inputnumber input {
   font-family:
@@ -45,17 +49,32 @@ body {
 }
 
 /* Dark mode — layout global */
-.dark .layout-wrapper   { background-color: #090909 !important; }
-.dark .navbar           { background-color: #141414 !important; border-bottom-color: #272727 !important; }
-.dark .sidebar          { background-color: #141414 !important; border-right-color:  #272727 !important; }
-.dark .nav-item         { color: #c0c0c0 !important; }
-.dark .nav-item:hover   { color: #ffffff !important; background: rgba(255,255,255,0.06) !important; }
-.dark .nav-item.active  {
+.dark .layout-wrapper {
+  background-color: #090909 !important;
+}
+.dark .navbar {
+  background-color: #141414 !important;
+  border-bottom-color: #272727 !important;
+}
+.dark .sidebar {
+  background-color: #141414 !important;
+  border-right-color: #272727 !important;
+}
+.dark .nav-item {
+  color: #c0c0c0 !important;
+}
+.dark .nav-item:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.dark .nav-item.active {
   color: #ffffff !important;
   background: rgba(255, 255, 255, 0.07) !important;
   box-shadow: inset 3px 0 0 #0077bc !important;
 }
-.dark .section-label    { color: #4a4a4a !important; }
+.dark .section-label {
+  color: #4a4a4a !important;
+}
 
 /* ConfirmDialog */
 .p-confirmdialog-message {
@@ -119,7 +138,6 @@ body {
 
 .p-datatable .p-datatable-tbody > tr > td {
   border-bottom: 1px solid #e2e8f0;
-  padding: 0.9rem 1rem;
   font-size: 0.875rem;
   color: #1e293b !important;
 }
@@ -132,11 +150,45 @@ body {
   background: #f8fafc !important;
   border-top: 1px solid #e2e8f0 !important;
   border-radius: 0 0 12px 12px !important;
-  font-size: 0.9rem !important;
+  font-size: 0.85rem !important;
   color: #64748b !important;
+  padding: 0.7rem 0.75rem !important;
   transition:
     background-color 0.25s ease,
     border-color 0.25s ease !important;
+}
+
+.p-datatable .p-paginator .p-paginator-first,
+.p-datatable .p-paginator .p-paginator-prev,
+.p-datatable .p-paginator .p-paginator-next,
+.p-datatable .p-paginator .p-paginator-last,
+.p-datatable .p-paginator .p-paginator-page {
+  width: 2.3rem !important;
+  height: 2.3rem !important;
+  min-width: unset !important;
+}
+
+/* Trigger del rpp dropdown (dentro de la tabla) */
+.p-datatable .p-paginator .p-paginator-rpp-dropdown .p-select-label {
+  padding: 0.5rem 0.4rem 0.5rem 0.55rem !important;
+  font-size: 0.85rem !important;
+  line-height: 1.25 !important;
+}
+.p-datatable .p-paginator .p-paginator-rpp-dropdown .p-select-dropdown {
+  width: 2.5rem !important;
+  padding: 0 0.2rem !important;
+}
+.p-datatable .p-paginator .p-paginator-rpp-dropdown .p-select-dropdown svg {
+  width: 0.65rem !important;
+  height: 0.65rem !important;
+}
+
+/* Overlay del rpp dropdown — appendTo body lo saca del .p-datatable,
+   así que el selector global es la única opción sin PT pass-through */
+.p-select-overlay .p-select-option {
+  padding: 0.3rem 0.65rem !important;
+  font-size: 0.85rem !important;
+  min-height: unset !important;
 }
 
 /* Dark mode */
