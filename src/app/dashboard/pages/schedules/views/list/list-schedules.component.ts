@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -6,9 +7,9 @@ import { map } from 'rxjs';
 import { PRIMENG_UI } from '../../../../../shared/primeNG/primeng-ui';
 import { PRIMENG_OVERLAY } from '../../../../../shared/primeNG/primeng-overlay';
 import { PRIMENG_FORMS } from '../../../../../shared/primeNG/primeng-forms';
-import { HorariosService } from '../../services/horarios.service';
+import { SchedulesService } from '../../services/schedules.service';
 import { ToastService } from '../../../../../shared/services/toast.service';
-import { BlockedDate } from '../../interfaces/horario.interface';
+import { BlockedDate, DoctorOption, ScheduleSaveRequest } from '../../interfaces/schedule.interface';
 
 interface DayState {
   startTime: string;
@@ -17,31 +18,32 @@ interface DayState {
 }
 
 const WEEK_DAYS = [
-  { number: 0, name: 'Lunes', short: 'LUN' },
-  { number: 1, name: 'Martes', short: 'MAR' },
-  { number: 2, name: 'Miércoles', short: 'MIÉ' },
-  { number: 3, name: 'Jueves', short: 'JUE' },
-  { number: 4, name: 'Viernes', short: 'VIE' },
-  { number: 5, name: 'Sábado', short: 'SÁB' },
-  { number: 6, name: 'Domingo', short: 'DOM' },
+  { number: 1, name: 'Lunes',     short: 'LUN' },
+  { number: 2, name: 'Martes',    short: 'MAR' },
+  { number: 3, name: 'Miércoles', short: 'MIÉ' },
+  { number: 4, name: 'Jueves',    short: 'JUE' },
+  { number: 5, name: 'Viernes',   short: 'VIE' },
+  { number: 6, name: 'Sábado',    short: 'SÁB' },
+  { number: 7, name: 'Domingo',   short: 'DOM' },
 ];
 
 @Component({
-  selector: 'app-list-horarios',
+  selector: 'app-list-schedules',
   imports: [PRIMENG_UI, PRIMENG_OVERLAY, PRIMENG_FORMS, NgClass],
-  templateUrl: './list-horarios.component.html',
-  styleUrl: './list-horarios.component.css',
+  templateUrl: './list-schedules.component.html',
+  styleUrl: './list-schedules.component.css',
 })
-export class ListHorariosComponent {
-  private readonly service = inject(HorariosService);
-  private readonly toast = inject(ToastService);
-  private readonly fb = inject(FormBuilder);
+export class ListSchedulesComponent {
+  private readonly service = inject(SchedulesService);
+  private readonly toast   = inject(ToastService);
+  private readonly fb      = inject(FormBuilder);
 
-  readonly WEEK_DAYS = WEEK_DAYS;
+  readonly WEEK_DAYS   = WEEK_DAYS;
   readonly slotOptions = [15, 30, 45, 60];
 
   selectedDoctorId = signal<string | null>(null);
-  dayStates = signal<DayState[]>(
+  saving           = signal(false);
+  dayStates        = signal<DayState[]>(
     WEEK_DAYS.map(() => ({ startTime: '', endTime: '', active: false })),
   );
   slotDuration = signal(30);
@@ -49,22 +51,14 @@ export class ListHorariosComponent {
 
   readonly doctorOptions = toSignal(
     this.service.getDoctorOptions().pipe(
-      map((docs) =>
+      map((docs): DoctorOption[] =>
         docs.map((d) => ({
           ...d,
-          label: `Dr. ${d.firstName} ${d.lastName}${d.specialty ? ' — ' + d.specialty : ''}`,
+          label: `Dr. ${d.fullName}${d.specialties[0] ? ' — ' + d.specialties[0].name : ''}`,
         })),
       ),
     ),
-    {
-      initialValue: [] as {
-        id: string;
-        firstName: string;
-        lastName: string;
-        specialty?: string;
-        label: string;
-      }[],
-    },
+    { initialValue: [] as DoctorOption[] },
   );
 
   readonly selectedDoctor = computed(
@@ -73,7 +67,9 @@ export class ListHorariosComponent {
 
   readonly selectedDoctorInitials = computed(() => {
     const d = this.selectedDoctor();
-    return d ? (d.firstName[0] + d.lastName[0]).toUpperCase() : '';
+    if (!d) return '';
+    const parts = d.fullName.trim().split(/\s+/);
+    return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase();
   });
 
   readonly slotCounts = computed(() =>
@@ -89,8 +85,8 @@ export class ListHorariosComponent {
 
   blockedForm = this.fb.nonNullable.group({
     fromDate: ['', Validators.required],
-    toDate: ['', Validators.required],
-    reason: ['', Validators.required],
+    toDate:   ['', Validators.required],
+    reason:   ['', Validators.required],
   });
 
   onDoctorChange(id: string | null): void {
@@ -107,14 +103,12 @@ export class ListHorariosComponent {
           const s = schedules.find((sch) => sch.dayOfWeek === d.number);
           return {
             startTime: s?.startTime ?? '',
-            endTime: s?.endTime ?? '',
-            active: s?.active ?? false,
+            endTime:   s?.endTime   ?? '',
+            active:    s?.active    ?? false,
           };
         }),
       );
     });
-
-    this.service.getBlockedDatesByDoctor(id).subscribe((dates) => this.blockedDates.set(dates));
   }
 
   private resetState(): void {
@@ -130,7 +124,40 @@ export class ListHorariosComponent {
   }
 
   saveChanges(): void {
-    this.toast.success('Cambios guardados correctamente.');
+    const doctorId = this.selectedDoctorId();
+    if (!doctorId) return;
+
+    const states = this.dayStates();
+    const hasInvalidActive = states.some((s) => s.active && (!s.startTime || !s.endTime));
+    if (hasInvalidActive) {
+      this.toast.error('Los días activos deben tener horario de inicio y fin.');
+      return;
+    }
+
+    const payload: ScheduleSaveRequest = {
+      slotDurationMinutes: this.slotDuration(),
+      days: WEEK_DAYS
+        .map((d, i) => ({ dayOfWeek: d.number, ...states[i] }))
+        .filter((d) => d.startTime && d.endTime)
+        .map(({ dayOfWeek, startTime, endTime, active }) => ({
+          dayOfWeek,
+          startTime,
+          endTime,
+          active,
+        })),
+    };
+
+    this.saving.set(true);
+    this.service.saveSchedules(doctorId, payload).subscribe({
+      next: () => {
+        this.toast.success('Horario guardado correctamente.');
+        this.saving.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.toast.error(err.error?.message ?? 'Error al guardar el horario.');
+        this.saving.set(false);
+      },
+    });
   }
 
   addBlockedDate(): void {
@@ -157,11 +184,7 @@ export class ListHorariosComponent {
     if (from === to)
       return d1.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
     const fromStr = d1.toLocaleDateString('es-PE', { day: 'numeric', month: 'long' });
-    const toStr = d2.toLocaleDateString('es-PE', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
+    const toStr   = d2.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
     return `${fromStr} — ${toStr}`;
   }
 

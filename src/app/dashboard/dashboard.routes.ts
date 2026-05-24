@@ -32,15 +32,15 @@ export const dashboardRoutes: Routes = [
       {
         path: 'appointments',
         loadComponent: () =>
-          import('./pages/appointments/views/list/list-citas.component').then(
-            (m) => m.ListCitasComponent,
+          import('./pages/appointments/views/list/list-appointments.component').then(
+            (m) => m.ListAppointmentsComponent,
           ),
       },
       {
         path: 'schedules',
         loadComponent: () =>
-          import('./pages/schedules/views/list/list-horarios.component').then(
-            (m) => m.ListHorariosComponent,
+          import('./pages/schedules/views/list/list-schedules.component').then(
+            (m) => m.ListSchedulesComponent,
           ),
       },
       {

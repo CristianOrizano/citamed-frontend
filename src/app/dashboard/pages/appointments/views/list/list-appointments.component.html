@@ -1,0 +1,136 @@
+<div class="flex flex-col gap-5 w-full">
+
+  <!-- Header -->
+  <div>
+    <h2 class="text-[1.75rem] font-bold text-(--p-text-color) m-0 tracking-[-0.7px]">Gestión de citas</h2>
+    <p class="text-sm text-(--p-text-muted-color) mt-1 m-0">Administra todas las citas médicas del sistema</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="bg-white dark:bg-[#1c1c1c] border border-(--p-content-border-color)
+              rounded-[14px] px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Médico</label>
+        <p-select [(ngModel)]="filter.doctorId" [options]="doctorOptions()" optionLabel="label" optionValue="id"
+          placeholder="Todos" [showClear]="true" appendTo="body" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Estado</label>
+        <p-select [(ngModel)]="filter.status" [options]="statusOptions" optionLabel="label" optionValue="value"
+          placeholder="Todos" [showClear]="true" appendTo="body" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-[0.73rem] font-semibold text-(--p-text-muted-color) tracking-wide">Fecha</label>
+        <input type="date" pInputText [(ngModel)]="filter.date" class="w-full" />
+      </div>
+
+      <div class="flex gap-2 items-center mb-0.5">
+        <p-button label="Buscar" icon="pi pi-search" size="small" [outlined]="true" (onClick)="search()" />
+        <p-button icon="pi pi-filter-slash" size="small" [outlined]="true" severity="secondary"
+          pTooltip="Limpiar filtros" tooltipPosition="top" (onClick)="clearFilters()" />
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="overflow-hidden rounded-[14px] border border-(--p-content-border-color)
+              bg-white dark:bg-[#1c1c1c] shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+    <p-table #dt [value]="loading() ? skeletonRows : appointments()" [lazy]="true"
+      (onLazyLoad)="loadAppointments($event)" [totalRecords]="totalRecords()" [paginator]="true"
+      [rows]="tableRows" [paginatorDropdownAppendTo]="'body'" [rowsPerPageOptions]="[10, 25, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+      [rowHover]="true" [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width:22%">Paciente</th>
+          <th style="width:20%">Médico</th>
+          <th style="width:15%">Especialidad</th>
+          <th style="width:18%">Fecha y hora</th>
+          <th style="width:15%; text-align:center">Estado</th>
+          <th style="width:10%"><div class="flex justify-center">Acciones</div></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-a>
+        @if (loading()) {
+          <tr appTableSkeletonRow [columns]="tableColumns"></tr>
+        } @else {
+          <tr>
+
+            <!-- Paciente -->
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-[0.72rem] font-bold flex-shrink-0"
+                  [ngClass]="getAvatarColor(a.patientId)">
+                  {{ getInitials(a.patientName) }}
+                </div>
+                <span class="text-[0.83rem] font-semibold text-(--p-text-color) truncate">{{ a.patientName }}</span>
+              </div>
+            </td>
+
+            <!-- Médico -->
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-[0.72rem] font-bold flex-shrink-0"
+                  [ngClass]="getAvatarColor(a.doctorId)">
+                  {{ getInitials(a.doctorName) }}
+                </div>
+                <span class="text-[0.83rem] font-semibold text-(--p-text-color) truncate">Dr. {{ a.doctorName }}</span>
+              </div>
+            </td>
+
+            <!-- Especialidad -->
+            <td>
+              <span class="text-[0.78rem] font-medium text-(--p-text-muted-color)">{{ a.specialty }}</span>
+            </td>
+
+            <!-- Fecha y hora -->
+            <td>
+              <span class="text-[0.83rem] text-(--p-text-color)">{{ formatDateTime(a.date, a.startTime) }}</span>
+            </td>
+
+            <!-- Estado -->
+            <td>
+              <div class="flex justify-center">
+                <span class="text-[0.72rem] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
+                  [ngClass]="getStatusConfig(a.status).badgeClass">
+                  {{ getStatusConfig(a.status).label }}
+                </span>
+              </div>
+            </td>
+
+            <!-- Acciones -->
+            <td>
+              <div class="flex items-center justify-center">
+                <p-button icon="pi pi-eye" [text]="true" [rounded]="true" severity="info" size="small"
+                  pTooltip="Ver detalle" tooltipPosition="top" />
+              </div>
+            </td>
+
+          </tr>
+        }
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            <div class="flex flex-col items-center justify-center py-14 gap-2 text-(--p-text-muted-color)">
+              <i class="pi pi-calendar text-4xl opacity-25"></i>
+              <span class="text-sm font-medium">No se encontraron citas</span>
+              <span class="text-xs opacity-70">Intenta con otros filtros de búsqueda</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+
+</div>

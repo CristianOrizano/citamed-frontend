@@ -1,5 +1,6 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { PRIMENG_UI } from '../../../../../shared/primeNG/primeng-ui';
 import { PRIMENG_OVERLAY } from '../../../../../shared/primeNG/primeng-overlay';
@@ -12,7 +13,12 @@ import { TableSkeletonRowComponent } from '../../../../../shared/components/tabl
 import { DoctorFormDialogComponent } from '../../components/medico-form-dialog/doctor-form-dialog.component';
 import { DoctorsService } from '../../services/doctors.service';
 import { ToastService } from '../../../../../shared/services/toast.service';
-import { DialogMode, Doctor, DoctorFilterRequest, SpecialtyOption } from '../../interfaces/doctor.interface';
+import {
+  DialogMode,
+  Doctor,
+  DoctorFilterRequest,
+  SpecialtyOption,
+} from '../../interfaces/doctor.interface';
 
 @Component({
   selector: 'app-list-medicos',
@@ -38,15 +44,15 @@ export class ListMedicosComponent {
   private readonly confirmation   = inject(ConfirmationService);
   private readonly toast          = inject(ToastService);
 
-  doctors      = signal<Doctor[]>([]);
+  doctors = signal<Doctor[]>([]);
   totalRecords = signal(0);
-  loading      = signal(false);
+  loading = signal(false);
 
   readonly tableColumns = 6;
-  readonly tableRows    = 10;
+  readonly tableRows = 10;
   readonly skeletonRows = Array(this.tableRows).fill({});
 
-  dialogVisible          = signal(false);
+  dialogVisible = signal(false);
   dialogMode: DialogMode = 'create';
   selectedDoctor: Partial<Doctor> | null = null;
 
@@ -58,23 +64,28 @@ export class ListMedicosComponent {
   };
 
   readonly specialtyOptions = toSignal(
-    this.doctorsService.getSpecialtyOptions(),
-    { initialValue: [] as SpecialtyOption[] }
+    this.doctorsService.getSpecialtyOptions().pipe(catchError(() => of([] as SpecialtyOption[]))),
+    { initialValue: [] as SpecialtyOption[] },
   );
 
   readonly activeOptions = [
-    { label: 'Activo',   value: true  },
+    { label: 'Activo', value: true },
     { label: 'Inactivo', value: false },
   ];
 
   private readonly avatarColors = [
-    'bg-blue-500', 'bg-violet-500', 'bg-teal-500',
-    'bg-orange-400', 'bg-rose-500', 'bg-emerald-500', 'bg-indigo-500',
+    'bg-blue-500',
+    'bg-violet-500',
+    'bg-teal-500',
+    'bg-orange-400',
+    'bg-rose-500',
+    'bg-emerald-500',
+    'bg-indigo-500',
   ];
 
   loadDoctors(event: TableLazyLoadEvent): void {
     const first = event.first ?? 0;
-    const rows  = event.rows  ?? this.tableRows;
+    const rows = event.rows ?? this.tableRows;
 
     this.filter = { ...this.filter, page: Math.floor(first / rows) + 1, size: rows };
 
@@ -95,7 +106,7 @@ export class ListMedicosComponent {
   search(): void {
     this.filter = {
       ...this.filter,
-      name:          this.filter.name?.trim(),
+      name: this.filter.name?.trim(),
       licenseNumber: this.filter.licenseNumber?.trim(),
     };
     this.dt.reset();
@@ -116,19 +127,19 @@ export class ListMedicosComponent {
 
   openCreate(): void {
     this.selectedDoctor = null;
-    this.dialogMode     = 'create';
+    this.dialogMode = 'create';
     this.dialogVisible.set(true);
   }
 
   openEdit(d: Doctor): void {
     this.selectedDoctor = { ...d };
-    this.dialogMode     = 'edit';
+    this.dialogMode = 'edit';
     this.dialogVisible.set(true);
   }
 
   openView(d: Doctor): void {
     this.selectedDoctor = { ...d };
-    this.dialogMode     = 'view';
+    this.dialogMode = 'view';
     this.dialogVisible.set(true);
   }
 
@@ -138,19 +149,21 @@ export class ListMedicosComponent {
 
   confirmToggle(d: Doctor): void {
     const action = d.active ? 'desactivar' : 'activar';
-    const name   = `${d.firstName} ${d.lastName}`;
+    const name = `${d.firstName} ${d.lastName}`;
     this.confirmation.confirm({
-      message:                `¿Deseas ${action} al Dr. <strong>${name}</strong>?`,
-      header:                 `Confirmar ${action}`,
-      icon:                   d.active ? 'pi pi-ban' : 'pi pi-check-circle',
-      acceptLabel:            `Sí, ${action}`,
-      rejectLabel:            'Cancelar',
+      message: `¿Deseas ${action} al Dr. <strong>${name}</strong>?`,
+      header: `Confirmar ${action}`,
+      icon: d.active ? 'pi pi-ban' : 'pi pi-check-circle',
+      acceptLabel: `Sí, ${action}`,
+      rejectLabel: 'Cancelar',
       acceptButtonStyleClass: d.active ? 'p-button-danger' : 'p-button-success',
       rejectButtonStyleClass: 'p-button-text',
       accept: () => {
         this.doctorsService.deleteDoctor(d.id).subscribe({
           next: () => {
-            this.toast.success(`Dr. ${name} ${d.active ? 'desactivado' : 'activado'} correctamente.`);
+            this.toast.success(
+              `Dr. ${name} ${d.active ? 'desactivado' : 'activado'} correctamente.`,
+            );
             this.dt.reset();
           },
           error: () => this.toast.error(`No se pudo ${action} al médico.`),
